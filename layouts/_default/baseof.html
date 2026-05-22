@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="{{ "manifest.webmanifest" | relURL }}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans SC"', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 16px 40px rgba(15, 23, 42, 0.08)'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-sky-950 text-slate-100 antialiased">
+  <div class="mx-auto flex min-h-screen max-w-6xl flex-col">
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-slate-950/85 backdrop-blur">
+      <nav class="mx-auto flex w-full items-center justify-between px-4 py-4 sm:px-6">
+        <a href="{{ "/" | relURL }}" class="max-w-[15rem] text-sm font-semibold tracking-wide text-sky-100 sm:text-base">冰岛 13 天环岛自驾路书</a>
+        <div class="flex items-center gap-2 text-sm text-slate-300">
+          <a href="{{ "/" | relURL }}" class="rounded-full px-3 py-2 transition hover:bg-white/10 hover:text-white">首页</a>
+          <a href="{{ "/itinerary/" | relURL }}" class="rounded-full px-3 py-2 transition hover:bg-white/10 hover:text-white">全部行程</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-1 px-4 py-6 sm:px-6 sm:py-8">
+      {{ block "main" . }}{{ end }}
+    </main>
+
+    <footer class="border-t border-white/10 px-4 py-6 text-sm text-slate-300 sm:px-6">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <p>移动端优先的冰岛环岛自驾路书，适合途中快速查看路线、住宿、天气与道路提醒。</p>
+        <p>更新时间：{{ now.Format "2006-01-02 15:04" }}</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="backToTop" class="fixed bottom-4 right-4 z-40 hidden rounded-full bg-cyan-400 px-4 py-3 text-sm font-semibold text-slate-950 shadow-soft transition hover:bg-cyan-300">
+    返回顶部
+  </button>
+
+  <script>
+    (function () {
+      const todayCards = document.querySelectorAll("[data-trip-date]");
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      const todayStr = `${yyyy}-${mm}-${dd}`;
+
+      todayCards.forEach((card) => {
+        if (card.dataset.tripDate === todayStr) {
+          card.classList.add("ring-2", "ring-cyan-300", "bg-cyan-50/10");
+          const badge = card.querySelector("[data-today-badge]");
+          if (badge) {
+            badge.classList.remove("hidden");
+          }
+        }
+      });
+
+      const topBtn = document.getElementById("backToTop");
+      const toggleTopBtn = () => {
+        if (!topBtn) return;
+        if (window.scrollY > 320) {
+          topBtn.classList.remove("hidden");
+        } else {
+          topBtn.classList.add("hidden");
+        }
+      };
+
+      window.addEventListener("scroll", toggleTopBtn, { passive: true });
+      toggleTopBtn();
+
+      if (topBtn) {
+        topBtn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
