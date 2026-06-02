@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { roadbook } from "../data/roadbook";
-import { geography, gods } from "../data/learning";
+import { geography, gods, mythSources } from "../data/learning";
 
 const toneClass = {
   amber: "border-amber-300/30 text-amber-100",
@@ -8,7 +8,8 @@ const toneClass = {
   orange: "border-orange-300/30 text-orange-100",
   emerald: "border-emerald-300/30 text-emerald-100",
   sky: "border-sky-300/30 text-sky-100",
-  slate: "border-slate-300/30 text-slate-100"
+  slate: "border-slate-300/30 text-slate-100",
+  rose: "border-rose-300/30 text-rose-100"
 };
 
 export default function TripApp({ days, baseUrl }) {
@@ -272,22 +273,166 @@ function LearningGrid({ title, items }) {
 }
 
 function GodsPanel() {
+  const groups = ["All", "Aesir", "Vanir", "Jotnar"];
+  const [activeGroup, setActiveGroup] = useState("All");
+  const [activeId, setActiveId] = useState(gods[0]?.id);
+  const visibleGods = activeGroup === "All" ? gods : gods.filter((god) => god.group.includes(activeGroup));
+  const activeGod = gods.find((god) => god.id === activeId) ?? visibleGods[0] ?? gods[0];
+
   return (
-    <section className="glass rounded-2xl p-4">
-      <h2 className="text-2xl font-black text-white">北欧众神谱系</h2>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {gods.map((god) => (
-          <details key={god.id} className={`rounded-2xl border bg-white/10 p-4 ${toneClass[god.tone]}`}>
-            <summary className="cursor-pointer list-none">
-              <div className="text-3xl">{god.symbol}</div>
-              <h3 className="mt-3 text-lg font-black text-white">{god.name}</h3>
-              <p className="mt-1 text-xs opacity-70">{god.title}</p>
-            </summary>
-            <p className="mt-3 text-sm leading-6 text-cyan-50/70">{god.body}</p>
-          </details>
-        ))}
+    <section className="glass overflow-hidden rounded-2xl p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">norse mythology atlas</p>
+          <h2 className="mt-2 text-3xl font-black text-white">北欧众神谱系</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-cyan-50/68">
+            以《诗体埃达》《散文埃达》为核心线索，兼顾故事、关系、神职和学术注记。这里不是完整百科，而是旅行途中能读得下去的神话速写。
+          </p>
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {groups.map((group) => (
+            <button
+              key={group}
+              onClick={() => {
+                setActiveGroup(group);
+                const nextGod = group === "All" ? gods[0] : gods.find((god) => god.group.includes(group));
+                if (nextGod) setActiveId(nextGod.id);
+              }}
+              className={`shrink-0 rounded-xl border px-3 py-2 text-xs font-bold transition ${
+                activeGroup === group ? "border-cyan-200 bg-cyan-200 text-slate-950" : "border-white/10 bg-white/10 text-cyan-50/70"
+              }`}
+            >
+              {group}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+          {visibleGods.map((god) => (
+            <button
+              key={god.id}
+              onClick={() => setActiveId(god.id)}
+              className={`group rounded-2xl border p-3 text-left transition ${
+                activeGod.id === god.id
+                  ? "border-cyan-200 bg-cyan-200/16 shadow-[0_0_28px_rgba(103,232,249,0.14)]"
+                  : "border-white/10 bg-white/8 hover:border-cyan-200/40 hover:bg-white/12"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <GodSigil god={god} compact />
+                <div>
+                  <h3 className="font-black text-white">{god.name}</h3>
+                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-cyan-50/62">{god.title}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {activeGod && (
+          <article className={`relative overflow-hidden rounded-2xl border bg-slate-950/52 p-4 ${toneClass[activeGod.tone]}`}>
+            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-300/10 blur-3xl" />
+            <div className="relative grid gap-4 md:grid-cols-[180px_1fr]">
+              <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+                <GodSigil god={activeGod} />
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {activeGod.domains.map((domain) => (
+                    <span key={domain} className="rounded-full border border-white/10 bg-white/10 px-2.5 py-1 text-[11px] font-bold text-cyan-50/76">
+                      {domain}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/55">{activeGod.group} · {activeGod.oldNorse}</p>
+                <h3 className="mt-2 text-3xl font-black text-white">{activeGod.name}</h3>
+                <p className="mt-2 text-sm font-semibold leading-6 text-cyan-50/76">{activeGod.title}</p>
+                <p className="mt-4 text-sm leading-7 text-cyan-50/74">{activeGod.story}</p>
+              </div>
+            </div>
+
+            <div className="relative mt-4 grid gap-3 md:grid-cols-2">
+              <InfoBlock title="关键器物" body={activeGod.artifact} />
+              <InfoBlock title="旅行联想" body={activeGod.travelHook} />
+            </div>
+
+            <div className="relative mt-3 rounded-2xl border border-white/10 bg-white/8 p-4">
+              <h4 className="text-sm font-black text-white">神谱关系</h4>
+              <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                {activeGod.relations.map((relation) => (
+                  <div key={`${relation.label}-${relation.name}`} className="rounded-xl bg-slate-950/35 p-3">
+                    <p className="text-[11px] font-bold text-cyan-100/50">{relation.label}</p>
+                    <p className="mt-1 text-sm leading-5 text-cyan-50/82">{relation.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <details className="relative mt-3 rounded-2xl border border-white/10 bg-white/8 p-4">
+              <summary className="cursor-pointer text-sm font-black text-white">学术注记与资料线索</summary>
+              <p className="mt-3 text-sm leading-7 text-cyan-50/72">{activeGod.scholarNote}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {activeGod.sourceRefs.map((source) => (
+                  <span key={source} className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] text-cyan-50/64">{source}</span>
+                ))}
+              </div>
+            </details>
+          </article>
+        )}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-white/10 bg-white/8 p-4">
+        <h3 className="text-sm font-black text-white">资料来源与阅读线索</h3>
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {mythSources.map((source) => (
+            <a
+              key={source.title}
+              href={source.url}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-white/10 bg-slate-950/32 p-3 transition hover:border-cyan-200/40 hover:bg-white/10"
+            >
+              <p className="text-sm font-bold text-cyan-50">{source.title}</p>
+              <p className="mt-1 text-xs leading-5 text-cyan-50/60">{source.note}</p>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
+  );
+}
+
+function GodSigil({ god, compact = false }) {
+  const sizeClass = compact ? "h-14 w-14" : "mx-auto h-36 w-36";
+  return (
+    <div className={`${sizeClass} relative grid shrink-0 place-items-center rounded-2xl border border-white/10 bg-slate-950/60`}>
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <radialGradient id={`sigil-${god.id}`} cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stopColor="rgba(247,251,255,0.42)" />
+            <stop offset="45%" stopColor="rgba(103,232,249,0.16)" />
+            <stop offset="100%" stopColor="rgba(15,23,42,0)" />
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="42" fill={`url(#sigil-${god.id})`} />
+        <path d="M50 9 L61 38 L91 50 L61 62 L50 91 L39 62 L9 50 L39 38Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+        <circle cx="50" cy="50" r="29" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" strokeWidth="1.2" />
+        <path d="M27 72 C38 78 62 78 73 72" fill="none" stroke="rgba(94,244,166,0.3)" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+      <span className={compact ? "text-2xl font-black text-white" : "text-6xl font-black text-white"}>{god.symbol}</span>
+    </div>
+  );
+}
+
+function InfoBlock({ title, body }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+      <h4 className="text-sm font-black text-white">{title}</h4>
+      <p className="mt-2 text-sm leading-6 text-cyan-50/72">{body}</p>
+    </div>
   );
 }
 
