@@ -100,16 +100,27 @@ function DayRail({ days, selectedDay, onSelect }) {
 
 function RouteBoard({ days, selectedDay, onSelect }) {
   const points = [
-    [36, 78], [31, 67], [34, 57], [42, 47], [57, 42], [63, 34], [67, 25],
-    [57, 20], [42, 24], [28, 34], [24, 50], [25, 63], [32, 75]
+    [31, 78], [39, 69], [45, 75], [55, 73], [70, 62], [76, 50], [70, 36],
+    [60, 30], [45, 36], [30, 45], [22, 58], [25, 70], [31, 78]
+  ];
+  const terrain = [
+    { label: "Vatnajokull", x: 62, y: 68, color: "#b7f7ff" },
+    { label: "Myrdalsjokull", x: 42, y: 71, color: "#b7f7ff" },
+    { label: "Myvatn", x: 68, y: 39, color: "#5ef4a6" },
+    { label: "Snaefellsnes", x: 24, y: 57, color: "#ffb067" },
+    { label: "Reykjavik", x: 31, y: 81, color: "#78e7ff" }
   ];
   const path = points.map(([x, y], index) => `${index === 0 ? "M" : "L"} ${x} ${y}`).join(" ");
+  const coastline =
+    "M19 78 C15 72 18 66 13 60 C18 55 18 49 24 44 C21 38 29 34 35 32 C41 24 51 27 57 22 C63 24 69 21 75 29 C83 31 86 39 82 47 C89 54 82 63 75 66 C70 77 59 80 49 78 C42 85 29 84 19 78Z";
+  const highland =
+    "M39 64 C35 56 38 45 47 40 C58 34 70 40 72 51 C75 63 65 71 53 70 C47 70 42 68 39 64Z";
 
   return (
-    <div className="glass rounded-2xl p-4">
+    <div className="glass overflow-hidden rounded-2xl p-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">light map</p>
+          <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">terrain map</p>
           <h2 className="mt-1 text-xl font-bold text-white">Iceland Ring Route</h2>
         </div>
         <span className="rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-3 py-2 text-xs text-emerald-100">逆时针</span>
@@ -121,20 +132,57 @@ function RouteBoard({ days, selectedDay, onSelect }) {
             <stop offset="55%" stopColor="#5ef4a6" />
             <stop offset="100%" stopColor="#ff8a4c" />
           </linearGradient>
+          <linearGradient id="landGlow" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="rgba(120,231,255,0.2)" />
+            <stop offset="50%" stopColor="rgba(15,23,42,0.72)" />
+            <stop offset="100%" stopColor="rgba(94,244,166,0.16)" />
+          </linearGradient>
+          <radialGradient id="iceGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(247,251,255,0.9)" />
+            <stop offset="100%" stopColor="rgba(120,231,255,0.05)" />
+          </radialGradient>
+          <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="1.8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
-        <path d="M20 80 C8 54 21 20 49 11 C75 3 94 24 91 49 C88 73 66 91 39 86 C30 84 24 82 20 80Z" fill="rgba(255,255,255,0.045)" stroke="rgba(255,255,255,0.16)" strokeWidth="1.2" />
-        <path d={path} fill="none" stroke="url(#routeGlow)" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="0" y="0" width="100" height="100" rx="8" fill="rgba(2,6,23,0.28)" />
+        <path d="M0 80 C22 62 44 74 66 54 C80 42 87 25 100 18 L100 100 L0 100Z" fill="rgba(94,244,166,0.035)" />
+        <path d={coastline} fill="url(#landGlow)" stroke="rgba(181,247,255,0.38)" strokeWidth="0.8" />
+        <path d={coastline} fill="none" stroke="rgba(120,231,255,0.18)" strokeWidth="2.8" filter="url(#softGlow)" />
+        <path d={highland} fill="rgba(15,23,42,0.52)" stroke="rgba(255,255,255,0.12)" strokeDasharray="1.4 1.6" strokeWidth="0.45" />
+        <path d="M57 61 C61 55 70 57 72 64 C74 71 65 76 58 73 C53 70 53 65 57 61Z" fill="url(#iceGlow)" opacity="0.78" />
+        <path d="M38 67 C41 63 47 64 48 69 C49 74 42 77 38 73 C35 71 36 69 38 67Z" fill="url(#iceGlow)" opacity="0.55" />
+        <path d="M17 62 C21 58 27 57 31 60" fill="none" stroke="rgba(120,231,255,0.24)" strokeWidth="0.6" strokeLinecap="round" />
+        <path d="M69 29 C73 31 77 34 80 39" fill="none" stroke="rgba(120,231,255,0.24)" strokeWidth="0.6" strokeLinecap="round" />
+        <path d={path} fill="none" stroke="rgba(2,6,23,0.75)" strokeWidth="4.6" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={path} fill="none" stroke="url(#routeGlow)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" filter="url(#softGlow)" />
+        {terrain.map((item) => (
+          <g key={item.label}>
+            <circle cx={item.x} cy={item.y} r="1.2" fill={item.color} opacity="0.95" />
+            <text x={item.x + 2.2} y={item.y + 1.2} fontSize="2.4" fill="rgba(226,249,255,0.62)">{item.label}</text>
+          </g>
+        ))}
         {points.map(([x, y], index) => {
           const day = days[index];
           const active = day.day === selectedDay;
           return (
             <g key={day.slug} onClick={() => onSelect(day.day)} className="cursor-pointer">
-              <circle cx={x} cy={y} r={active ? 4.8 : 3.5} fill={active ? "#f7fbff" : "#071018"} stroke={active ? "#5ef4a6" : "#78e7ff"} strokeWidth="1.5" />
-              <text x={x} y={y + 10} textAnchor="middle" fontSize="4" fill={active ? "#f7fbff" : "rgba(247,251,255,0.6)"}>{day.day}</text>
+              <circle cx={x} cy={y} r={active ? 7 : 0} fill="none" stroke="rgba(94,244,166,0.45)" strokeWidth="1" />
+              <circle cx={x} cy={y} r={active ? 4.5 : 3.2} fill={active ? "#f7fbff" : "#071018"} stroke={active ? "#5ef4a6" : "#78e7ff"} strokeWidth="1.4" />
+              <text x={x} y={y + 8.2} textAnchor="middle" fontSize="3.2" fontWeight="700" fill={active ? "#f7fbff" : "rgba(247,251,255,0.66)"}>{day.day}</text>
             </g>
           );
         })}
       </svg>
+      <div className="mt-3 grid grid-cols-3 gap-2 text-[11px] text-cyan-50/60">
+        <span className="rounded-xl bg-white/10 px-2 py-2">glacier zones</span>
+        <span className="rounded-xl bg-white/10 px-2 py-2">ring road</span>
+        <span className="rounded-xl bg-white/10 px-2 py-2">13 day stops</span>
+      </div>
     </div>
   );
 }
