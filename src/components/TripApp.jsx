@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { roadbook } from "../data/roadbook";
-import { geography, gods, mythSources } from "../data/learning";
+import { gods, mythSources } from "../data/learning";
 import { godStories } from "../data/mythologyStories";
 import { sagaStories, sagaSources } from "../data/sagaStories";
+import { geographyAtlas, geographySources } from "../data/geographyAtlas";
 
 const toneClass = {
   amber: "border-amber-300/30 text-amber-100",
@@ -70,7 +71,7 @@ export default function TripApp({ days, baseUrl }) {
         </section>
       )}
 
-      {activeTab === "geography" && <LearningGrid title="冰岛地理速记" items={geography} />}
+      {activeTab === "geography" && <GeographyPanel />}
       {activeTab === "gods" && <GodsPanel />}
       {activeTab === "sagas" && <SagaPanel />}
       {activeTab === "todo" && <TodoPanel days={days} />}
@@ -272,6 +273,188 @@ function LearningGrid({ title, items }) {
         ))}
       </div>
     </section>
+  );
+}
+
+function GeographyPanel() {
+  const [activeId, setActiveId] = useState(geographyAtlas[0]?.id);
+  const activeItem = geographyAtlas.find((item) => item.id === activeId) ?? geographyAtlas[0];
+
+  return (
+    <section className="glass overflow-hidden rounded-2xl p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">iceland field notes</p>
+          <h2 className="mt-2 text-3xl font-black text-white">冰岛地理图鉴</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-cyan-50/68">
+            把旅途中会遇到的板块裂谷、冰川、黑沙滩、地热、火山、峡湾、极光和天气做成可读图卡。不是背知识点，而是让你到现场知道自己在看什么。
+          </p>
+        </div>
+        <span className="rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-100">
+          {geographyAtlas.length} notes
+        </span>
+      </div>
+
+      <div className="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="hide-scrollbar flex gap-2 overflow-x-auto pb-1 lg:grid lg:grid-cols-1 lg:overflow-visible">
+          {geographyAtlas.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveId(item.id)}
+              className={`min-w-[220px] rounded-2xl border p-3 text-left transition lg:min-w-0 ${
+                activeItem.id === item.id
+                  ? "border-cyan-200 bg-cyan-200/16 shadow-[0_0_28px_rgba(103,232,249,0.14)]"
+                  : "border-white/10 bg-white/8 hover:border-cyan-200/40 hover:bg-white/12"
+              }`}
+            >
+              <p className="text-[11px] uppercase tracking-[0.18em] text-cyan-100/48">{item.place}</p>
+              <h3 className="mt-1 font-black text-white">{item.title}</h3>
+              <p className="mt-1 text-xs leading-5 text-cyan-50/62">{item.travelDays.join(" / ")}</p>
+            </button>
+          ))}
+        </div>
+
+        {activeItem && (
+          <article className="relative overflow-hidden rounded-2xl border border-cyan-300/20 bg-slate-950/52 p-4">
+            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-300/10 blur-3xl" />
+            <div className="relative grid gap-4 md:grid-cols-[220px_1fr]">
+              <GeoIllustration type={activeItem.visual} tone={activeItem.tone} />
+              <div>
+                <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/55">{activeItem.place}</p>
+                <h3 className="mt-2 text-3xl font-black text-white">{activeItem.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-cyan-50/74">{activeItem.summary}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {activeItem.travelDays.map((day) => (
+                    <span key={day} className="rounded-full bg-cyan-200/10 px-2.5 py-1 text-[11px] font-bold text-cyan-100/72">{day}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="relative mt-4 grid gap-3 md:grid-cols-3">
+              {activeItem.keyFacts.map((fact) => (
+                <div key={fact} className="rounded-2xl border border-white/10 bg-white/8 p-3">
+                  <p className="text-sm leading-6 text-cyan-50/72">{fact}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="relative mt-3 grid gap-3 md:grid-cols-2">
+              <InfoBlock title="现场怎么看" body={activeItem.observe} />
+              <InfoBlock title="安全提醒" body={activeItem.safety} />
+            </div>
+          </article>
+        )}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-white/10 bg-white/8 p-4">
+        <h3 className="text-sm font-black text-white">地理与安全资料入口</h3>
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {geographySources.map((source) => (
+            <a
+              key={source.title}
+              href={source.url}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-white/10 bg-slate-950/32 p-3 transition hover:border-cyan-200/40 hover:bg-white/10"
+            >
+              <p className="text-sm font-bold text-cyan-50">{source.title}</p>
+              <p className="mt-1 text-xs leading-5 text-cyan-50/60">{source.note}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function GeoIllustration({ type, tone }) {
+  const accent = {
+    cyan: "#78e7ff",
+    sky: "#b7f7ff",
+    slate: "#94a3b8",
+    amber: "#fbbf24",
+    orange: "#fb923c",
+    emerald: "#5ef4a6"
+  }[tone] ?? "#78e7ff";
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
+      <svg className="aspect-square w-full" viewBox="0 0 120 120" role="img" aria-label={`${type} illustration`}>
+        <defs>
+          <linearGradient id={`geo-${type}`} x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor={accent} stopOpacity="0.72" />
+            <stop offset="100%" stopColor="#020617" stopOpacity="0.2" />
+          </linearGradient>
+          <filter id={`glow-${type}`} x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <rect width="120" height="120" rx="18" fill="rgba(2,6,23,0.28)" />
+        <circle cx="92" cy="22" r="20" fill={accent} opacity="0.08" />
+        {type === "rift" && (
+          <>
+            <path d="M15 92 L48 20 L54 92Z" fill="rgba(255,255,255,0.05)" stroke={accent} strokeOpacity="0.5" />
+            <path d="M105 92 L72 20 L66 92Z" fill="rgba(255,255,255,0.05)" stroke={accent} strokeOpacity="0.5" />
+            <path d="M58 18 C48 35 66 46 54 62 C47 72 61 82 52 98" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" filter={`url(#glow-${type})`} />
+          </>
+        )}
+        {type === "glacier" && (
+          <>
+            <path d="M18 82 C35 52 45 32 60 18 C78 35 93 58 104 86 Z" fill={`url(#geo-${type})`} stroke="rgba(255,255,255,0.3)" />
+            <path d="M23 88 C43 80 61 86 79 78 C91 74 101 78 109 85" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" />
+            <path d="M45 38 L55 82 M63 35 L66 80 M76 51 L72 78" stroke="rgba(2,6,23,0.45)" strokeWidth="2" />
+          </>
+        )}
+        {type === "waves" && (
+          <>
+            <path d="M18 80 C35 62 48 82 64 64 C78 48 94 66 105 52" fill="none" stroke={accent} strokeWidth="5" strokeLinecap="round" filter={`url(#glow-${type})`} />
+            <path d="M18 92 C34 84 47 94 62 84 C78 74 92 84 106 76" fill="none" stroke="rgba(255,255,255,0.32)" strokeWidth="3" strokeLinecap="round" />
+            <path d="M34 38 L53 78 L72 38 Z" fill="rgba(15,23,42,0.8)" stroke="rgba(255,255,255,0.25)" />
+          </>
+        )}
+        {type === "geothermal" && (
+          <>
+            <ellipse cx="60" cy="88" rx="36" ry="12" fill={`url(#geo-${type})`} opacity="0.75" />
+            <path d="M42 70 C32 54 52 52 44 36 M61 72 C52 55 72 50 62 30 M78 70 C69 56 88 50 78 38" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" filter={`url(#glow-${type})`} />
+            <circle cx="60" cy="88" r="5" fill="#020617" opacity="0.6" />
+          </>
+        )}
+        {type === "volcano" && (
+          <>
+            <path d="M20 92 L49 38 L58 58 L70 34 L104 92Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.22)" />
+            <path d="M57 58 C65 65 64 75 75 83 C84 89 93 88 103 94" fill="none" stroke={accent} strokeWidth="4" strokeLinecap="round" filter={`url(#glow-${type})`} />
+            <path d="M62 30 C55 20 72 18 66 8" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" opacity="0.8" />
+          </>
+        )}
+        {type === "fjord" && (
+          <>
+            <path d="M18 94 L38 30 L58 94Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.22)" />
+            <path d="M50 94 L75 24 L108 94Z" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" />
+            <path d="M20 88 C40 75 51 83 62 70 C76 54 92 65 106 48" fill="none" stroke={accent} strokeWidth="4" strokeLinecap="round" filter={`url(#glow-${type})`} />
+          </>
+        )}
+        {type === "aurora" && (
+          <>
+            <path d="M12 40 C32 18 50 70 72 38 C88 15 100 45 112 28" fill="none" stroke={accent} strokeWidth="5" strokeLinecap="round" filter={`url(#glow-${type})`} />
+            <path d="M18 86 L37 58 L52 86Z M56 86 L78 50 L104 86Z" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" />
+            <circle cx="28" cy="28" r="1.5" fill="white" opacity="0.8" />
+            <circle cx="92" cy="42" r="1.2" fill="white" opacity="0.65" />
+          </>
+        )}
+        {type === "wind" && (
+          <>
+            <path d="M16 42 C36 30 52 44 70 34 C86 25 99 32 108 42" fill="none" stroke={accent} strokeWidth="4" strokeLinecap="round" filter={`url(#glow-${type})`} />
+            <path d="M24 64 H83 C99 64 99 48 88 48" fill="none" stroke="rgba(255,255,255,0.36)" strokeWidth="3" strokeLinecap="round" />
+            <path d="M18 82 H68 C83 82 85 70 74 70" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="3" strokeLinecap="round" />
+          </>
+        )}
+      </svg>
+    </div>
   );
 }
 
