@@ -3,11 +3,12 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TripApp from "../components/TripApp.jsx";
 import { sortDays } from "../lib/itinerary";
+import { BASE_PATH } from "../lib/paths";
 
 const entries = await getCollection("itinerary");
 const days = sortDays(entries);
 ---
 
 <BaseLayout>
-  <TripApp client:load days={days} baseUrl={import.meta.env.BASE_URL} />
+  <TripApp client:load days={days} baseUrl={BASE_PATH} />
 </BaseLayout>

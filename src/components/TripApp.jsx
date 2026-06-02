@@ -12,6 +12,7 @@ const toneClass = {
 };
 
 export default function TripApp({ days, baseUrl }) {
+  const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   const [activeTab, setActiveTab] = useState("itinerary");
   const [selectedDay, setSelectedDay] = useState(days[0]?.day ?? 1);
   const [openChecklist, setOpenChecklist] = useState(true);
@@ -61,7 +62,7 @@ export default function TripApp({ days, baseUrl }) {
           <DayRail days={days} selectedDay={selectedDay} onSelect={setSelectedDay} />
           <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
             <RouteBoard days={days} selectedDay={selectedDay} onSelect={setSelectedDay} />
-            <TodayPanel day={current} baseUrl={baseUrl} openChecklist={openChecklist} setOpenChecklist={setOpenChecklist} />
+            <TodayPanel day={current} baseUrl={base} openChecklist={openChecklist} setOpenChecklist={setOpenChecklist} />
           </div>
         </section>
       )}

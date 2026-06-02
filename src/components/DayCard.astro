@@ -1,8 +1,10 @@
 ---
-const { day, baseUrl = import.meta.env.BASE_URL } = Astro.props;
+import { withBase } from "../lib/paths";
+
+const { day } = Astro.props;
 ---
 
-<a href={`${baseUrl}itinerary/${day.slug}/`} class="glass block rounded-2xl p-4 transition hover:-translate-y-0.5 hover:border-cyan-200/45">
+<a href={withBase(`itinerary/${day.slug}/`)} class="glass block rounded-2xl p-4 transition hover:-translate-y-0.5 hover:border-cyan-200/45">
   <div class="flex items-start justify-between gap-3">
     <div>
       <p class="text-sm font-semibold text-cyan-100/60">Day {day.day} · {day.date}</p>
