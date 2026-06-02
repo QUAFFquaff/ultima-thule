@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { roadbook } from "../data/roadbook";
 import { geography, gods, mythSources } from "../data/learning";
+import { godStories } from "../data/mythologyStories";
 
 const toneClass = {
   amber: "border-amber-300/30 text-amber-100",
@@ -278,6 +279,7 @@ function GodsPanel() {
   const [activeId, setActiveId] = useState(gods[0]?.id);
   const visibleGods = activeGroup === "All" ? gods : gods.filter((god) => god.group.includes(activeGroup));
   const activeGod = gods.find((god) => god.id === activeId) ?? visibleGods[0] ?? gods[0];
+  const activeStory = activeGod ? godStories[activeGod.id] : undefined;
 
   return (
     <section className="glass overflow-hidden rounded-2xl p-4">
@@ -350,13 +352,13 @@ function GodsPanel() {
                 <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/55">{activeGod.group} · {activeGod.oldNorse}</p>
                 <h3 className="mt-2 text-3xl font-black text-white">{activeGod.name}</h3>
                 <p className="mt-2 text-sm font-semibold leading-6 text-cyan-50/76">{activeGod.title}</p>
-                <p className="mt-4 text-sm leading-7 text-cyan-50/74">{activeGod.story}</p>
               </div>
             </div>
 
-            <div className="relative mt-4 grid gap-3 md:grid-cols-2">
+            {activeStory && <StoryReader story={activeStory} />}
+
+            <div className="relative mt-4 grid gap-3">
               <InfoBlock title="关键器物" body={activeGod.artifact} />
-              <InfoBlock title="旅行联想" body={activeGod.travelHook} />
             </div>
 
             <div className="relative mt-3 rounded-2xl border border-white/10 bg-white/8 p-4">
@@ -423,6 +425,38 @@ function GodSigil({ god, compact = false }) {
         <path d="M27 72 C38 78 62 78 73 72" fill="none" stroke="rgba(94,244,166,0.3)" strokeWidth="2" strokeLinecap="round" />
       </svg>
       <span className={compact ? "text-2xl font-black text-white" : "text-6xl font-black text-white"}>{god.symbol}</span>
+    </div>
+  );
+}
+
+function StoryReader({ story }) {
+  return (
+    <div className="relative mt-4 rounded-2xl border border-cyan-200/12 bg-slate-950/36 p-4">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/50">rest stop reading</p>
+          <h4 className="mt-1 text-lg font-black text-white">神话故事</h4>
+        </div>
+        <span className="rounded-full bg-cyan-200/10 px-3 py-1 text-[11px] font-bold text-cyan-100/72">
+          {story.chapters.length} chapters
+        </span>
+      </div>
+      <p className="mt-3 text-sm leading-7 text-cyan-50/74">{story.intro}</p>
+      <div className="mt-4 space-y-3">
+        {story.chapters.map((chapter, index) => (
+          <details key={chapter.title} className="rounded-2xl border border-white/10 bg-white/8 p-4" open={index === 0}>
+            <summary className="cursor-pointer list-none">
+              <div className="flex items-start gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-cyan-200 text-xs font-black text-slate-950">
+                  {index + 1}
+                </span>
+                <h5 className="pt-0.5 text-sm font-black text-white">{chapter.title}</h5>
+              </div>
+            </summary>
+            <p className="mt-3 text-sm leading-7 text-cyan-50/72">{chapter.body}</p>
+          </details>
+        ))}
+      </div>
     </div>
   );
 }
