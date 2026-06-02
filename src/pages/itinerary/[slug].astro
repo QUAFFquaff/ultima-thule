@@ -1,0 +1,117 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { learningById } from "../../data/learning";
+import { roadbook } from "../../data/roadbook";
+import { sortDays, toDay } from "../../lib/itinerary";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("itinerary");
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.md$/, "") },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const day = toDay(entry);
+const allDays = sortDays(await getCollection("itinerary"));
+const index = allDays.findIndex((item) => item.slug === day.slug);
+const prev = index > 0 ? allDays[index - 1] : null;
+const next = index < allDays.length - 1 ? allDays[index + 1] : null;
+const related = day.learningRefs.map((id) => learningById[id]).filter(Boolean);
+const infoGroups = [
+  { title: "重点", items: day.highlights, tone: "border-cyan-300/20 bg-cyan-300/10" },
+  { title: "风险提醒", items: day.risks, tone: "border-rose-300/20 bg-rose-300/10" },
+  { title: "备选方案", items: day.backup, tone: "border-white/10 bg-white/10" },
+  { title: "出发检查", items: day.checklist, tone: "border-emerald-300/20 bg-emerald-300/10" }
+];
+---
+
+<BaseLayout title={`Day ${day.day} - ${day.title}`}>
+  <article class="space-y-4">
+    <section class="glass rounded-2xl p-5">
+      <a class="inline-flex rounded-xl border border-white/10 px-3 py-2 text-sm text-cyan-50/75 hover:bg-white/10" href={`${import.meta.env.BASE_URL}itinerary/`}>← 全部行程</a>
+      <div class="mt-5 flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold text-cyan-100/60">Day {day.day} · {day.date}</p>
+          <h1 class="aurora-text mt-2 text-4xl font-black leading-tight">{day.icon} {day.title}</h1>
+          <p class="mt-3 max-w-3xl text-sm leading-7 text-cyan-50/70">{day.route}</p>
+        </div>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div class="rounded-2xl border border-white/10 bg-white/10 p-3"><p class="text-xs text-cyan-100/60">里程</p><p class="mt-1 font-bold text-white">{day.distance}</p></div>
+        <div class="rounded-2xl border border-white/10 bg-white/10 p-3"><p class="text-xs text-cyan-100/60">车程</p><p class="mt-1 font-bold text-white">{day.driveTime}</p></div>
+        <div class="rounded-2xl border border-white/10 bg-white/10 p-3"><p class="text-xs text-cyan-100/60">住宿</p><p class="mt-1 font-bold text-white">{day.accommodation}</p></div>
+        <div class="rounded-2xl border border-white/10 bg-white/10 p-3"><p class="text-xs text-cyan-100/60">区域</p><p class="mt-1 font-bold text-white">{day.region}</p></div>
+      </div>
+      <a class="mt-4 flex w-full items-center justify-center rounded-2xl bg-cyan-300 px-5 py-4 text-base font-black text-slate-950" href={day.mapUrl} target="_blank" rel="noreferrer">{roadbook.mapButton}</a>
+    </section>
+
+    <section class="grid gap-3 md:grid-cols-2">
+      {infoGroups.map((group) => (
+        <section class={`rounded-2xl border p-4 ${group.tone}`}>
+          <h2 class="font-black text-white">{group.title}</h2>
+          <ul class="mt-3 space-y-2 text-sm leading-6 text-cyan-50/75">
+            {group.items.map((item) => <li>• {item}</li>)}
+          </ul>
+        </section>
+      ))}
+    </section>
+
+    <section class="glass rounded-2xl p-5">
+      <h2 class="text-xl font-black text-white">路线分段</h2>
+      <div class="mt-3 space-y-2">
+        {day.segments.map((segment, segmentIndex) => (
+          <div class="grid grid-cols-[52px_1fr] gap-3 rounded-2xl bg-white/10 p-3">
+            <span class="text-sm font-bold text-emerald-100">#{segmentIndex + 1}</span>
+            <div>
+              <p class="font-bold text-white">{segment.from} → {segment.to}</p>
+              <p class="mt-1 text-sm text-cyan-50/60">{segment.distance} / {segment.driveTime}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="glass rounded-2xl p-5">
+        <h2 class="text-xl font-black text-white">今日学习</h2>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          {related.map((item) => (
+            <details class="rounded-2xl border border-white/10 bg-white/10 p-4">
+              <summary class="cursor-pointer font-bold text-cyan-50">{"name" in item ? item.name : item.title}</summary>
+              {"place" in item && <p class="mt-2 text-xs text-emerald-100">{item.place}</p>}
+              {"title" in item && "name" in item && <p class="mt-2 text-xs text-emerald-100">{item.title}</p>}
+              <p class="mt-2 text-sm leading-6 text-cyan-50/70">{item.body}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="glass prose prose-invert max-w-none rounded-2xl p-5 prose-headings:text-white prose-p:text-cyan-50/80">
+      <Content />
+    </section>
+
+    <nav class="grid gap-3 sm:grid-cols-2">
+      {prev ? (
+        <a class="glass rounded-2xl p-4" href={`${import.meta.env.BASE_URL}itinerary/${prev.slug}/`}>
+          <p class="text-sm text-cyan-100/60">上一天</p>
+          <p class="mt-1 font-black text-white">Day {prev.day} · {prev.title}</p>
+        </a>
+      ) : (
+        <div class="glass rounded-2xl p-4 text-cyan-50/50">第一天前没有更多行程</div>
+      )}
+      {next ? (
+        <a class="glass rounded-2xl p-4 text-right" href={`${import.meta.env.BASE_URL}itinerary/${next.slug}/`}>
+          <p class="text-sm text-cyan-100/60">下一天</p>
+          <p class="mt-1 font-black text-white">Day {next.day} · {next.title}</p>
+        </a>
+      ) : (
+        <div class="glass rounded-2xl p-4 text-right text-cyan-50/50">最后一天后没有更多行程</div>
+      )}
+    </nav>
+  </article>
+</BaseLayout>

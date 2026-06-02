@@ -1,0 +1,46 @@
+---
+import "../styles/global.css";
+import { roadbook } from "../data/roadbook";
+
+const { title = roadbook.title, description = roadbook.summary } = Astro.props;
+const pageTitle = title === roadbook.title ? roadbook.title : `${title} | ${roadbook.title}`;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#071018" />
+    <link rel="manifest" href={`${import.meta.env.BASE_URL}manifest.webmanifest`} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div class="relative mx-auto min-h-screen w-full max-w-6xl px-4 py-4 sm:px-6">
+      <header class="sticky top-3 z-50 mb-5">
+        <nav class="glass flex items-center justify-between rounded-2xl px-4 py-3">
+          <a href={import.meta.env.BASE_URL} class="flex items-center gap-3">
+            <span class="grid h-9 w-9 place-items-center rounded-xl border border-cyan-200/30 bg-cyan-200/10 text-lg">ᚢ</span>
+            <span>
+              <span class="block text-sm font-bold text-white">{roadbook.title}</span>
+              <span class="block text-xs text-cyan-100/70">{roadbook.subtitle}</span>
+            </span>
+          </a>
+          <div class="flex items-center gap-2 text-sm">
+            <a class="rounded-xl px-3 py-2 text-cyan-50/80 hover:bg-white/10 hover:text-white" href={import.meta.env.BASE_URL}>首页</a>
+            <a class="rounded-xl px-3 py-2 text-cyan-50/80 hover:bg-white/10 hover:text-white" href={`${import.meta.env.BASE_URL}itinerary/`}>全部</a>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="mt-8 pb-8 text-center text-xs leading-6 text-cyan-50/55">
+        {roadbook.footer}
+      </footer>
+    </div>
+  </body>
+</html>
