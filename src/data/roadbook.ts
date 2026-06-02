@@ -8,11 +8,12 @@ export const roadbook = {
   mapButton: "开启今日 Google Maps 导航",
   tabs: [
     { id: "itinerary", label: "行程", icon: "🗺️" },
-    { id: "geography", label: "地理", icon: "🧊" },
+    { id: "geography", label: "地理", icon: "🧭" },
     { id: "gods", label: "众神", icon: "⚡" },
+    { id: "sagas", label: "Saga", icon: "📜" },
     { id: "todo", label: "待办", icon: "☑️" },
-    { id: "budget", label: "记账", icon: "💰" },
-    { id: "weather", label: "天气", icon: "🌦️" }
+    { id: "budget", label: "记账", icon: "💵" },
+    { id: "weather", label: "天气", icon: "🌤️" }
   ],
   stats: [
     { label: "天数", value: "13 天" },
@@ -22,7 +23,7 @@ export const roadbook = {
   ],
   dailyModes: [
     { label: "途中模式", description: "只看今日路线、风险、住宿和导航按钮。" },
-    { label: "学习模式", description: "补充北欧神话、冰岛地理和安全知识。" }
+    { label: "学习模式", description: "补充北欧神话、Saga、冰岛地理和安全知识。" }
   ],
   footer:
     "路书信息以实际天气、道路封控、预约状态和当地安全公告为准。"

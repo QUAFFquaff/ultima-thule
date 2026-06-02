@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { roadbook } from "../data/roadbook";
 import { geography, gods, mythSources } from "../data/learning";
 import { godStories } from "../data/mythologyStories";
+import { sagaStories, sagaSources } from "../data/sagaStories";
 
 const toneClass = {
   amber: "border-amber-300/30 text-amber-100",
@@ -71,6 +72,7 @@ export default function TripApp({ days, baseUrl }) {
 
       {activeTab === "geography" && <LearningGrid title="冰岛地理速记" items={geography} />}
       {activeTab === "gods" && <GodsPanel />}
+      {activeTab === "sagas" && <SagaPanel />}
       {activeTab === "todo" && <TodoPanel days={days} />}
       {activeTab === "budget" && <PlaceholderPanel title="记账占位" body="这里预留给油费、住宿、温泉、餐饮和活动费用。v1 先不接数据库，后续可用 localStorage 做离线记账。" />}
       {activeTab === "weather" && <PlaceholderPanel title="天气占位" body="这里预留给 Vedur、road.is、极光指数和火山封控链接。v1 保持静态，避免旅行途中依赖不稳定接口。" />}
@@ -352,6 +354,10 @@ function GodsPanel() {
                 <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/55">{activeGod.group} · {activeGod.oldNorse}</p>
                 <h3 className="mt-2 text-3xl font-black text-white">{activeGod.name}</h3>
                 <p className="mt-2 text-sm font-semibold leading-6 text-cyan-50/76">{activeGod.title}</p>
+                <div className="mt-4 rounded-2xl border border-white/10 bg-white/8 p-4">
+                  <h4 className="text-sm font-black text-white">神话导读</h4>
+                  <p className="mt-2 text-sm leading-7 text-cyan-50/74">{activeGod.story}</p>
+                </div>
               </div>
             </div>
 
@@ -458,6 +464,134 @@ function StoryReader({ story }) {
         ))}
       </div>
     </div>
+  );
+}
+
+function SagaPanel() {
+  const types = [
+    { id: "all", label: "全部" },
+    { id: "heroic", label: "英雄" },
+    { id: "family", label: "家族" },
+    { id: "voyage", label: "航海" },
+    { id: "outlaw", label: "流放" },
+    { id: "haunting", label: "亡灵" }
+  ];
+  const [activeType, setActiveType] = useState("all");
+  const [activeSagaId, setActiveSagaId] = useState(sagaStories[0]?.id);
+  const visibleSagas = activeType === "all" ? sagaStories : sagaStories.filter((saga) => saga.type === activeType);
+  const activeSaga = sagaStories.find((saga) => saga.id === activeSagaId) ?? visibleSagas[0] ?? sagaStories[0];
+
+  return (
+    <section className="glass overflow-hidden rounded-2xl p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">icelandic saga shelf</p>
+          <h2 className="mt-2 text-3xl font-black text-white">Saga 英雄故事篇</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-cyan-50/68">
+            Edda 更像神话与诗学源头，Saga 则把神话世界观落到人的生活里：家族、法律、复仇、航海、亡灵和名誉。这里把 Saga 和众神篇并排读。
+          </p>
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {types.map((type) => (
+            <button
+              key={type.id}
+              onClick={() => {
+                setActiveType(type.id);
+                const nextSaga = type.id === "all" ? sagaStories[0] : sagaStories.find((saga) => saga.type === type.id);
+                if (nextSaga) setActiveSagaId(nextSaga.id);
+              }}
+              className={`shrink-0 rounded-xl border px-3 py-2 text-xs font-bold transition ${
+                activeType === type.id ? "border-cyan-200 bg-cyan-200 text-slate-950" : "border-white/10 bg-white/10 text-cyan-50/70"
+              }`}
+            >
+              {type.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+          {visibleSagas.map((saga) => (
+            <button
+              key={saga.id}
+              onClick={() => setActiveSagaId(saga.id)}
+              className={`rounded-2xl border p-3 text-left transition ${
+                activeSaga.id === saga.id
+                  ? "border-cyan-200 bg-cyan-200/16 shadow-[0_0_28px_rgba(103,232,249,0.14)]"
+                  : "border-white/10 bg-white/8 hover:border-cyan-200/40 hover:bg-white/12"
+              }`}
+            >
+              <p className="text-[11px] uppercase tracking-[0.18em] text-cyan-100/48">{saga.period}</p>
+              <h3 className="mt-1 font-black text-white">{saga.title}</h3>
+              <p className="mt-1 line-clamp-2 text-xs leading-5 text-cyan-50/62">{saga.subtitle}</p>
+            </button>
+          ))}
+        </div>
+
+        {activeSaga && (
+          <article className="relative overflow-hidden rounded-2xl border border-cyan-300/20 bg-slate-950/52 p-4">
+            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-amber-300/10 blur-3xl" />
+            <div className="relative">
+              <p className="text-xs uppercase tracking-[0.22em] text-cyan-100/55">{activeSaga.period}</p>
+              <h3 className="mt-2 text-3xl font-black text-white">{activeSaga.title}</h3>
+              <p className="mt-2 text-sm font-semibold leading-6 text-cyan-50/76">{activeSaga.subtitle}</p>
+              <p className="mt-4 text-sm leading-7 text-cyan-50/74">{activeSaga.summary}</p>
+            </div>
+
+            <div className="relative mt-4 grid gap-3 md:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+                <h4 className="text-sm font-black text-white">对应众神</h4>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {activeSaga.pairedGods.map((god) => (
+                    <span key={god} className="rounded-full bg-cyan-200/10 px-2.5 py-1 text-[11px] font-bold text-cyan-100/78">
+                      {god}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+                <h4 className="text-sm font-black text-white">主题关键词</h4>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {activeSaga.themes.map((theme) => (
+                    <span key={theme} className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold text-cyan-50/70">
+                      {theme}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <StoryReader story={{ intro: "下面是适合旅途中分段阅读的 Saga 故事梗概。它保留叙事味道，但不替代完整译本。", chapters: activeSaga.chapters }} />
+
+            <details className="relative mt-3 rounded-2xl border border-white/10 bg-white/8 p-4">
+              <summary className="cursor-pointer text-sm font-black text-white">这篇 Saga 怎样和众神篇对应？</summary>
+              <p className="mt-3 text-sm leading-7 text-cyan-50/72">
+                众神篇讲的是神话母题：命运、誓言、边界、死亡、诗歌、海洋和混乱。Saga 篇把这些母题放进人的社会：家族争斗、法律赔偿、航海迁徙、亡灵恐惧、爱情选择和名誉压力。对应众神不是说故事里一定有神直接登场，而是说它们共享同一套文化想象。
+              </p>
+            </details>
+          </article>
+        )}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-white/10 bg-white/8 p-4">
+        <h3 className="text-sm font-black text-white">Saga 资料来源与继续阅读</h3>
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {sagaSources.map((source) => (
+            <a
+              key={source.title}
+              href={source.url}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-white/10 bg-slate-950/32 p-3 transition hover:border-cyan-200/40 hover:bg-white/10"
+            >
+              <p className="text-sm font-bold text-cyan-50">{source.title}</p>
+              <p className="mt-1 text-xs leading-5 text-cyan-50/60">{source.note}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
