@@ -15,6 +15,9 @@ const pageTitle = title === roadbook.title ? roadbook.title : `${title} | ${road
     <meta name="description" content={description} />
     <meta name="theme-color" content="#071018" />
     <link rel="manifest" href={withBase("manifest.webmanifest")} />
+    <link rel="preconnect" href="https://tile.openstreetmap.org" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" defer></script>
     <title>{pageTitle}</title>
   </head>
   <body>

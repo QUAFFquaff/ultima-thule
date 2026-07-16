@@ -1,9 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { roadbook } from "../data/roadbook";
+import { accommodationGuide } from "../data/accommodationGuide";
+import { tripStops } from "../data/tripMap";
 import { gods, mythSources } from "../data/learning";
 import { godStories } from "../data/mythologyStories";
 import { sagaStories, sagaSources } from "../data/sagaStories";
 import { geographyAtlas, geographySources } from "../data/geographyAtlas";
+import { googleDirectionsUrl, googleMapsSearchUrl, segmentDirectionsUrl } from "../lib/maps";
 
 const toneClass = {
   amber: "border-amber-300/30 text-amber-100",
@@ -76,7 +79,7 @@ export default function TripApp({ days, baseUrl }) {
       {activeTab === "sagas" && <SagaPanel />}
       {activeTab === "todo" && <TodoPanel days={days} />}
       {activeTab === "budget" && <PlaceholderPanel title="记账占位" body="这里预留给油费、住宿、温泉、餐饮和活动费用。v1 先不接数据库，后续可用 localStorage 做离线记账。" />}
-      {activeTab === "weather" && <PlaceholderPanel title="天气占位" body="这里预留给 Vedur、road.is、极光指数和火山封控链接。v1 保持静态，避免旅行途中依赖不稳定接口。" />}
+      {activeTab === "weather" && <TravelToolsPanel />}
     </div>
   );
 }
@@ -104,95 +107,118 @@ function DayRail({ days, selectedDay, onSelect }) {
 }
 
 function RouteBoard({ days, selectedDay, onSelect }) {
-  const points = [
-    [31, 78], [39, 69], [45, 75], [55, 73], [70, 62], [76, 50], [70, 36],
-    [60, 30], [45, 36], [30, 45], [22, 58], [25, 70], [31, 78]
-  ];
-  const terrain = [
-    { label: "Vatnajokull", x: 62, y: 68, color: "#b7f7ff" },
-    { label: "Myrdalsjokull", x: 42, y: 71, color: "#b7f7ff" },
-    { label: "Myvatn", x: 68, y: 39, color: "#5ef4a6" },
-    { label: "Snaefellsnes", x: 24, y: 57, color: "#ffb067" },
-    { label: "Reykjavik", x: 31, y: 81, color: "#78e7ff" }
-  ];
-  const path = points.map(([x, y], index) => `${index === 0 ? "M" : "L"} ${x} ${y}`).join(" ");
-  const coastline =
-    "M19 78 C15 72 18 66 13 60 C18 55 18 49 24 44 C21 38 29 34 35 32 C41 24 51 27 57 22 C63 24 69 21 75 29 C83 31 86 39 82 47 C89 54 82 63 75 66 C70 77 59 80 49 78 C42 85 29 84 19 78Z";
-  const highland =
-    "M39 64 C35 56 38 45 47 40 C58 34 70 40 72 51 C75 63 65 71 53 70 C47 70 42 68 39 64Z";
+  const day = days.find((item) => item.day === selectedDay) ?? days[0];
+  const stops = tripStops[selectedDay] ?? [];
 
   return (
     <div className="glass overflow-hidden rounded-2xl p-4">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">terrain map</p>
-          <h2 className="mt-1 text-xl font-bold text-white">Iceland Ring Route</h2>
+          <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">interactive route</p>
+          <h2 className="mt-1 text-xl font-bold text-white">Day {day.day} · 真实路线地图</h2>
+          <p className="mt-1 text-xs leading-5 text-cyan-50/55">点标记看说明；地图用于选住宿区域，正式驾驶请打开 Google Maps。</p>
         </div>
-        <span className="rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-3 py-2 text-xs text-emerald-100">逆时针</span>
+        <span className="shrink-0 rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-3 py-2 text-xs text-emerald-100">{day.distance}</span>
       </div>
-      <svg className="mt-4 aspect-[4/3] w-full" viewBox="0 0 100 100" role="img" aria-label="冰岛环岛路线可视化">
-        <defs>
-          <linearGradient id="routeGlow" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#78e7ff" />
-            <stop offset="55%" stopColor="#5ef4a6" />
-            <stop offset="100%" stopColor="#ff8a4c" />
-          </linearGradient>
-          <linearGradient id="landGlow" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="rgba(120,231,255,0.2)" />
-            <stop offset="50%" stopColor="rgba(15,23,42,0.72)" />
-            <stop offset="100%" stopColor="rgba(94,244,166,0.16)" />
-          </linearGradient>
-          <radialGradient id="iceGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(247,251,255,0.9)" />
-            <stop offset="100%" stopColor="rgba(120,231,255,0.05)" />
-          </radialGradient>
-          <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="1.8" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <rect x="0" y="0" width="100" height="100" rx="8" fill="rgba(2,6,23,0.28)" />
-        <path d="M0 80 C22 62 44 74 66 54 C80 42 87 25 100 18 L100 100 L0 100Z" fill="rgba(94,244,166,0.035)" />
-        <path d={coastline} fill="url(#landGlow)" stroke="rgba(181,247,255,0.38)" strokeWidth="0.8" />
-        <path d={coastline} fill="none" stroke="rgba(120,231,255,0.18)" strokeWidth="2.8" filter="url(#softGlow)" />
-        <path d={highland} fill="rgba(15,23,42,0.52)" stroke="rgba(255,255,255,0.12)" strokeDasharray="1.4 1.6" strokeWidth="0.45" />
-        <path d="M57 61 C61 55 70 57 72 64 C74 71 65 76 58 73 C53 70 53 65 57 61Z" fill="url(#iceGlow)" opacity="0.78" />
-        <path d="M38 67 C41 63 47 64 48 69 C49 74 42 77 38 73 C35 71 36 69 38 67Z" fill="url(#iceGlow)" opacity="0.55" />
-        <path d="M17 62 C21 58 27 57 31 60" fill="none" stroke="rgba(120,231,255,0.24)" strokeWidth="0.6" strokeLinecap="round" />
-        <path d="M69 29 C73 31 77 34 80 39" fill="none" stroke="rgba(120,231,255,0.24)" strokeWidth="0.6" strokeLinecap="round" />
-        <path d={path} fill="none" stroke="rgba(2,6,23,0.75)" strokeWidth="4.6" strokeLinecap="round" strokeLinejoin="round" />
-        <path d={path} fill="none" stroke="url(#routeGlow)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" filter="url(#softGlow)" />
-        {terrain.map((item) => (
-          <g key={item.label}>
-            <circle cx={item.x} cy={item.y} r="1.2" fill={item.color} opacity="0.95" />
-            <text x={item.x + 2.2} y={item.y + 1.2} fontSize="2.4" fill="rgba(226,249,255,0.62)">{item.label}</text>
-          </g>
+
+      <RouteMap day={day} stops={stops} />
+
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        {stops.map((stop, index) => (
+          <a
+            key={`${stop.name}-${index}`}
+            href={googleMapsSearchUrl(stop.query)}
+            target="_blank"
+            rel="noreferrer"
+            className="group rounded-2xl border border-white/10 bg-white/8 p-3 transition hover:border-cyan-200/40 hover:bg-white/12"
+          >
+            <div className="flex items-start gap-3">
+              <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-black ${stop.type === "stay" ? "bg-orange-300 text-slate-950" : stop.type === "start" ? "bg-emerald-300 text-slate-950" : "bg-cyan-300/15 text-cyan-100"}`}>{index + 1}</span>
+              <span>
+                <span className="block text-sm font-bold text-white group-hover:text-cyan-100">{stop.name} ↗</span>
+                <span className="mt-1 block text-xs leading-5 text-cyan-50/60">{stop.note}</span>
+              </span>
+            </div>
+          </a>
         ))}
-        {points.map(([x, y], index) => {
-          const day = days[index];
-          const active = day.day === selectedDay;
-          return (
-            <g key={day.slug} onClick={() => onSelect(day.day)} className="cursor-pointer">
-              <circle cx={x} cy={y} r={active ? 7 : 0} fill="none" stroke="rgba(94,244,166,0.45)" strokeWidth="1" />
-              <circle cx={x} cy={y} r={active ? 4.5 : 3.2} fill={active ? "#f7fbff" : "#071018"} stroke={active ? "#5ef4a6" : "#78e7ff"} strokeWidth="1.4" />
-              <text x={x} y={y + 8.2} textAnchor="middle" fontSize="3.2" fontWeight="700" fill={active ? "#f7fbff" : "rgba(247,251,255,0.66)"}>{day.day}</text>
-            </g>
-          );
-        })}
-      </svg>
-      <div className="mt-3 grid grid-cols-3 gap-2 text-[11px] text-cyan-50/60">
-        <span className="rounded-xl bg-white/10 px-2 py-2">glacier zones</span>
-        <span className="rounded-xl bg-white/10 px-2 py-2">ring road</span>
-        <span className="rounded-xl bg-white/10 px-2 py-2">13 day stops</span>
+      </div>
+
+      <div className="hide-scrollbar mt-3 flex gap-2 overflow-x-auto">
+        {days.map((item) => (
+          <button key={item.day} onClick={() => onSelect(item.day)} className={`shrink-0 rounded-xl px-3 py-2 text-xs font-bold ${item.day === selectedDay ? "bg-cyan-200 text-slate-950" : "bg-white/10 text-cyan-50/65"}`}>
+            D{item.day}
+          </button>
+        ))}
       </div>
     </div>
   );
 }
 
+function RouteMap({ day, stops }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    let map;
+    let timer;
+    let cancelled = false;
+
+    const mount = () => {
+      if (cancelled || !containerRef.current) return;
+      if (!window.L) {
+        timer = window.setTimeout(mount, 120);
+        return;
+      }
+
+      const L = window.L;
+      map = L.map(containerRef.current, { zoomControl: true, scrollWheelZoom: false });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+
+      const coordinates = stops.map((stop) => [stop.lat, stop.lng]);
+      if (coordinates.length > 1) {
+        L.polyline(coordinates, { color: "#67e8f9", weight: 4, opacity: 0.85, dashArray: "8 6" }).addTo(map);
+        map.fitBounds(coordinates, { padding: [34, 34], maxZoom: 9 });
+      } else if (coordinates[0]) {
+        map.setView(coordinates[0], 10);
+      }
+
+      stops.forEach((stop, index) => {
+        const color = stop.type === "stay" ? "#fdba74" : stop.type === "start" ? "#6ee7b7" : "#67e8f9";
+        const icon = L.divIcon({
+          className: "trip-map-marker",
+          html: `<span style="background:${color}">${index + 1}</span>`,
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        });
+        L.marker([stop.lat, stop.lng], { icon })
+          .bindPopup(`<strong>${stop.name}</strong><br><span>${stop.note}</span>`)
+          .addTo(map);
+      });
+    };
+
+    mount();
+    return () => {
+      cancelled = true;
+      if (timer) window.clearTimeout(timer);
+      if (map) map.remove();
+    };
+  }, [day.day, stops]);
+
+  return (
+    <div className="relative mt-4 overflow-hidden rounded-2xl border border-cyan-200/20 bg-slate-950/55">
+      <div ref={containerRef} className="h-[360px] w-full sm:h-[430px]" aria-label={`Day ${day.day} 路线地图`} />
+      <div className="pointer-events-none absolute bottom-3 left-3 z-[500] rounded-xl bg-slate-950/80 px-3 py-2 text-[11px] text-cyan-50/75 backdrop-blur">绿色出发 · 蓝色景点 · 橙色住宿</div>
+    </div>
+  );
+}
+
 function TodayPanel({ day, baseUrl, openChecklist, setOpenChecklist }) {
+  const stops = tripStops[day.day] ?? [];
+  const lodging = accommodationGuide[day.day];
+  const routeUrl = googleDirectionsUrl(stops.map((stop) => stop.query));
+
   return (
     <article className="glass rounded-2xl p-4">
       <div className="flex items-start justify-between gap-4">
@@ -209,9 +235,24 @@ function TodayPanel({ day, baseUrl, openChecklist, setOpenChecklist }) {
         <Metric label="住宿" value={day.accommodation} />
       </div>
       <div className="mt-4 flex gap-2">
-        <a className="flex-1 rounded-2xl bg-cyan-300 px-4 py-3 text-center text-sm font-black text-slate-950" href={day.mapUrl} target="_blank" rel="noreferrer">{roadbook.mapButton}</a>
+        <a className="flex-1 rounded-2xl bg-cyan-300 px-4 py-3 text-center text-sm font-black text-slate-950 transition hover:bg-cyan-200" href={routeUrl} target="_blank" rel="noreferrer">{roadbook.mapButton} ↗</a>
         <a className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold text-cyan-50" href={`${baseUrl}itinerary/${day.slug}/`}>详情</a>
       </div>
+      <p className="mt-2 text-xs leading-5 text-cyan-50/48">全程按钮适合预览；实际开车建议使用下方每一段的“导航”，手机端更稳定。</p>
+      {lodging && (
+        <section className="mt-4 rounded-2xl border border-orange-300/25 bg-orange-300/10 p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-100/65">今晚住哪里</p>
+              <h3 className="mt-1 text-lg font-black text-white">{lodging.area}</h3>
+            </div>
+            <span className="rounded-lg bg-orange-200 px-2 py-1 text-xs font-black text-slate-950">住宿选址</span>
+          </div>
+          <p className="mt-3 text-sm leading-6 text-orange-50/80">{lodging.why}</p>
+          <p className="mt-2 text-xs leading-5 text-orange-100/60">取舍：{lodging.tradeoff}</p>
+          <a className="mt-3 inline-flex rounded-xl border border-orange-200/25 bg-orange-200/10 px-3 py-2 text-sm font-bold text-orange-50 transition hover:bg-orange-200/20" href={googleMapsSearchUrl(lodging.search)} target="_blank" rel="noreferrer">在 Google Maps 查看这一带住宿 ↗</a>
+        </section>
+      )}
       <Timeline segments={day.segments} />
       <section className="mt-4 rounded-2xl border border-rose-300/20 bg-rose-400/10 p-4">
         <h3 className="font-bold text-rose-50">风险提醒</h3>
@@ -246,12 +287,13 @@ function Timeline({ segments }) {
       <h3 className="mb-2 text-sm font-bold text-cyan-50/90">路线时间线</h3>
       <div className="space-y-2">
         {segments.map((segment, index) => (
-          <div key={`${segment.from}-${segment.to}`} className="grid grid-cols-[48px_1fr] gap-3 rounded-2xl bg-white/10 p-3">
+          <div key={`${segment.from}-${segment.to}`} className="grid grid-cols-[36px_1fr_auto] items-center gap-3 rounded-2xl bg-white/10 p-3">
             <span className="text-xs font-bold text-emerald-100">#{index + 1}</span>
             <div>
               <p className="text-sm font-bold text-white">{segment.from} → {segment.to}</p>
               <p className="mt-1 text-xs text-cyan-50/60">{segment.distance} / {segment.driveTime}</p>
             </div>
+            <a className="rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-2 text-xs font-black text-cyan-50 transition hover:bg-cyan-200 hover:text-slate-950" href={segmentDirectionsUrl(segment.from, segment.to)} target="_blank" rel="noreferrer" aria-label={`导航 ${segment.from} 到 ${segment.to}`}>导航 ↗</a>
           </div>
         ))}
       </div>
@@ -799,6 +841,36 @@ function TodoPanel({ days }) {
             {item}
           </label>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function TravelToolsPanel() {
+  const tools = [
+    { icon: "🌦️", title: "天气与预警", body: "看区域预报、风速和黄色/橙色预警。", action: "打开 Veður", url: "https://en.vedur.is/" },
+    { icon: "🛣️", title: "实时道路", body: "看封路、路面状态、风和沿途摄像头。", action: "打开 Umferðin", url: "https://umferdin.is/en" },
+    { icon: "⚠️", title: "旅行警报", body: "火山、徒步与临时危险信息，以官方警报为准。", action: "打开 SafeTravel", url: "https://safetravel.is/" },
+    { icon: "🌌", title: "极光云图", body: "绿色代表云层，白色区域才更有机会看到极光。", action: "打开极光预报", url: "https://en.vedur.is/weather/forecasts/aurora/" }
+  ];
+
+  return (
+    <section className="glass rounded-2xl p-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-100/60">live travel desk</p>
+      <h2 className="mt-2 text-3xl font-black text-white">每天出发前的 3 分钟检查</h2>
+      <p className="mt-3 max-w-3xl text-sm leading-7 text-cyan-50/70">先看天气预警，再看整段道路，最后看 SafeTravel。Google Maps 负责导航，不负责判断冰岛的路是否适合今天开。</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        {tools.map((tool) => (
+          <a key={tool.title} href={tool.url} target="_blank" rel="noreferrer" className="group rounded-2xl border border-white/10 bg-white/8 p-4 transition hover:-translate-y-0.5 hover:border-cyan-200/40 hover:bg-white/12">
+            <span className="text-2xl">{tool.icon}</span>
+            <h3 className="mt-3 font-black text-white">{tool.title}</h3>
+            <p className="mt-2 text-sm leading-6 text-cyan-50/65">{tool.body}</p>
+            <p className="mt-3 text-sm font-black text-cyan-100">{tool.action} ↗</p>
+          </a>
+        ))}
+      </div>
+      <div className="mt-4 rounded-2xl border border-rose-300/20 bg-rose-300/10 p-4 text-sm leading-6 text-rose-50/80">
+        <strong className="text-white">决策顺序：</strong>出现官方警报或封路时，以取消、等待或改走为先；紧急情况拨打 112。
       </div>
     </section>
   );

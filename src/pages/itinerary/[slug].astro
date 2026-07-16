@@ -3,7 +3,10 @@ import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { learningById } from "../../data/learning";
 import { roadbook } from "../../data/roadbook";
+import { accommodationGuide } from "../../data/accommodationGuide";
+import { tripStops } from "../../data/tripMap";
 import { sortDays, toDay } from "../../lib/itinerary";
+import { googleDirectionsUrl, googleMapsSearchUrl, segmentDirectionsUrl } from "../../lib/maps";
 import { withBase } from "../../lib/paths";
 
 export async function getStaticPaths() {
@@ -22,6 +25,9 @@ const index = allDays.findIndex((item) => item.slug === day.slug);
 const prev = index > 0 ? allDays[index - 1] : null;
 const next = index < allDays.length - 1 ? allDays[index + 1] : null;
 const related = day.learningRefs.map((id) => learningById[id]).filter(Boolean);
+const lodging = accommodationGuide[day.day];
+const routeStops = tripStops[day.day] ?? [];
+const routeUrl = googleDirectionsUrl(routeStops.map((stop) => stop.query));
 const infoGroups = [
   { title: "重点", items: day.highlights, tone: "border-cyan-300/20 bg-cyan-300/10" },
   { title: "风险提醒", items: day.risks, tone: "border-rose-300/20 bg-rose-300/10" },
@@ -47,8 +53,19 @@ const infoGroups = [
         <div class="rounded-2xl border border-white/10 bg-white/10 p-3"><p class="text-xs text-cyan-100/60">住宿</p><p class="mt-1 font-bold text-white">{day.accommodation}</p></div>
         <div class="rounded-2xl border border-white/10 bg-white/10 p-3"><p class="text-xs text-cyan-100/60">区域</p><p class="mt-1 font-bold text-white">{day.region}</p></div>
       </div>
-      <a class="mt-4 flex w-full items-center justify-center rounded-2xl bg-cyan-300 px-5 py-4 text-base font-black text-slate-950" href={day.mapUrl} target="_blank" rel="noreferrer">{roadbook.mapButton}</a>
+      <a class="mt-4 flex w-full items-center justify-center rounded-2xl bg-cyan-300 px-5 py-4 text-base font-black text-slate-950" href={routeUrl} target="_blank" rel="noreferrer">{roadbook.mapButton} ↗</a>
+      <p class="mt-2 text-center text-xs leading-5 text-cyan-50/48">全程按钮适合预览；实际开车建议使用下方每一段的“导航”，手机端更稳定。</p>
     </section>
+
+    {lodging && (
+      <section class="rounded-2xl border border-orange-300/25 bg-orange-300/10 p-5">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-orange-100/60">今晚住哪里</p>
+        <h2 class="mt-2 text-2xl font-black text-white">{lodging.area}</h2>
+        <p class="mt-3 text-sm leading-7 text-orange-50/80">{lodging.why}</p>
+        <p class="mt-2 text-sm leading-6 text-orange-100/60">取舍：{lodging.tradeoff}</p>
+        <a class="mt-4 inline-flex rounded-xl border border-orange-200/25 bg-orange-200/10 px-4 py-3 text-sm font-black text-orange-50" href={googleMapsSearchUrl(lodging.search)} target="_blank" rel="noreferrer">在 Google Maps 查看这一带住宿 ↗</a>
+      </section>
+    )}
 
     <section class="grid gap-3 md:grid-cols-2">
       {infoGroups.map((group) => (
@@ -65,12 +82,13 @@ const infoGroups = [
       <h2 class="text-xl font-black text-white">路线分段</h2>
       <div class="mt-3 space-y-2">
         {day.segments.map((segment, segmentIndex) => (
-          <div class="grid grid-cols-[52px_1fr] gap-3 rounded-2xl bg-white/10 p-3">
+          <div class="grid grid-cols-[40px_1fr_auto] items-center gap-3 rounded-2xl bg-white/10 p-3">
             <span class="text-sm font-bold text-emerald-100">#{segmentIndex + 1}</span>
             <div>
               <p class="font-bold text-white">{segment.from} → {segment.to}</p>
               <p class="mt-1 text-sm text-cyan-50/60">{segment.distance} / {segment.driveTime}</p>
             </div>
+            <a class="rounded-xl border border-cyan-200/20 bg-cyan-200/10 px-3 py-2 text-xs font-black text-cyan-50" href={segmentDirectionsUrl(segment.from, segment.to)} target="_blank" rel="noreferrer">导航 ↗</a>
           </div>
         ))}
       </div>

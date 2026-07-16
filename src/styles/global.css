@@ -66,3 +66,36 @@ a {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.leaflet-container {
+  background: #10202a;
+  color: #0f172a;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.leaflet-control-attribution {
+  font-size: 9px;
+}
+
+.trip-map-marker {
+  background: transparent;
+  border: 0;
+}
+
+.trip-map-marker span {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 2px solid #f7fbff;
+  border-radius: 999px;
+  box-shadow: 0 5px 18px rgba(2, 6, 23, 0.45);
+  color: #071018;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.leaflet-popup-content {
+  margin: 13px 16px;
+  line-height: 1.55;
+}
