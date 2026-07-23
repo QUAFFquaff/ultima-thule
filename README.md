@@ -1,6 +1,6 @@
 # Ultima Thule
 
-冰岛 13 天环岛自驾旅行应用。项目已从 Hugo 迁移为 `Astro + React islands + Tailwind CSS`，保持静态输出，可部署到 GitHub Pages。
+2026 国庆冰岛 Day 0-11 顺时针环岛自驾旅行应用。当前每日路线、住宿和点位以 `2026国庆冰岛必须行.xlsx` 的“顺时针行程”为基准，保持静态输出，可部署到 GitHub Pages。
 
 ## 本地运行
 
@@ -17,9 +17,9 @@ GitHub Pages 部署路径配置为 `/ultima-thule/`。如果本机 Node 版本�
 每日行程位于：
 
 ```text
-src/content/itinerary/day01.md
+src/content/itinerary/day00.md
 ...
-src/content/itinerary/day13.md
+src/content/itinerary/day11.md
 ```
 
 修改路线、住宿、车程、风险、备选方案、路线分段和 Google Maps 链接，只需要编辑对应 Markdown 的 front matter。
@@ -27,14 +27,15 @@ src/content/itinerary/day13.md
 关键字段：
 
 ```yaml
-day: 1
+day: 0
 date: "2026-09-25"
-route: "KEF → Reykjavík"
-distance: "45 km"
-driveTime: "45 min"
-accommodation: "雷克雅未克市区"
+route: "北京出发 → 欧洲转机 → KEF → 机场附近酒店"
+distance: "机场短驳"
+driveTime: "待提车方案确认"
+accommodation: "KEF 机场附近（待确认）"
 mapUrl: "https://www.google.com/maps"
 learningRefs: ["odin", "aurora"]
+planNotes: ["Excel 待确认或修改意见；不会自动改变计划"]
 ```
 
 ## 修改站点配置
@@ -78,4 +79,5 @@ git push origin main
 - 每天查看天气、道路和封控
 - 黑沙滩不靠近湿沙线
 - 冰川徒步、温泉、观鲸提前预约
-- 替换所有 `mapUrl` 为真实 Google Maps 多点导航链接
+- 核对页面黄色“Excel 待确认 / 修改意见”卡片
+- 使用每日全程预览或每一段的 Google Maps 导航按钮

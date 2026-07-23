@@ -25,6 +25,7 @@ const itinerary = defineCollection({
     highlights: z.array(z.string()),
     risks: z.array(z.string()),
     backup: z.array(z.string()),
+    planNotes: z.array(z.string()).default([]),
     checklist: z.array(z.string()),
     segments: z.array(segmentSchema)
   })

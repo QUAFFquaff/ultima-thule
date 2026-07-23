@@ -6,17 +6,16 @@ export type AccommodationTip = {
 };
 
 export const accommodationGuide: Record<number, AccommodationTip> = {
-  1: { area: "101 市中心 / Hlíðar 东侧", why: "首次到访住 101 最方便步行；自驾更看重停车时，可向 Hlíðar 或 Laugavegur 东段找。", tradeoff: "订房前确认是否含停车位，以及夜间停车规则。", search: "hotels 101 Reykjavik Iceland parking" },
-  2: { area: "Selfoss 镇中心、1 号公路附近", why: "餐饮、超市和加油集中，第二天向南岸出发不用折返。", tradeoff: "比乡村住宿少一点景观感，但补给和应急最省心。", search: "hotels Selfoss Iceland" },
-  3: { area: "Vík 镇内 / 镇东侧", why: "黑沙滩行程结束后很快入住，次日继续向 Skaftafell 方向也顺路。", tradeoff: "热门且房量有限，优先订可取消房型。", search: "hotels Vik Iceland" },
-  4: { area: "Höfn 镇中心或港口附近", why: "餐厅、加油和超市集中；完成冰河湖长途日后无需再走乡间支路。", tradeoff: "如果次日想更早进东峡湾，镇东北侧也可，但餐饮选择更少。", search: "hotels Hofn Iceland" },
-  5: { area: "Egilsstaðir 1 号公路 / Lagarfljót 湖畔", why: "东部服务最齐全，适合作为两晚基地并往返 Seyðisfjörður。", tradeoff: "湖畔更安静，镇中心补给更方便；优先避免每天换房。", search: "hotels Egilsstadir Iceland" },
-  6: { area: "续住 Egilsstaðir 原酒店", why: "当天是往返缓冲日，同住一处能少搬一次行李，也便于根据山口天气取消或调整。", tradeoff: "若执意住 Seyðisfjörður，次日需要再翻一次山口。", search: "hotels Egilsstadir Iceland" },
-  7: { area: "Reykjahlíð / 米湖东北岸", why: "靠近补给和主要道路，第二天去 Húsavík 也更直接。", tradeoff: "米湖住宿分散，不能只看直线距离，要核对实际入口和餐厅营业时间。", search: "hotels Reykjahlid Myvatn Iceland" },
-  8: { area: "Akureyri 市中心下城", why: "餐厅和海滨步行范围集中，长途后可以停好车再步行。", tradeoff: "部分街区有坡度和停车限制，带大件行李时确认酒店入口。", search: "hotels Akureyri city centre Iceland parking" },
-  9: { area: "Grundarfjörður 镇内", why: "位于斯奈山北岸中段，教会山近，第二天完整绕半岛也方便。", tradeoff: "选择少于 Stykkishólmur，建议两晚一起锁定。", search: "hotels Grundarfjordur Iceland" },
-  10: { area: "续住 Grundarfjörður", why: "完成半岛环线后回同一房间，能保留教会山清晨或傍晚机位。", tradeoff: "如果第二天特别想早到雷市，也可住 Borgarnes，但会牺牲半岛晚间体验。", search: "hotels Grundarfjordur Iceland" },
-  11: { area: "101 市中心 / Vesturbær", why: "101 适合最后两天步行；Vesturbær 更安静，仍靠近老城和港口。", tradeoff: "开车进中心要先解决停车，再比较房价。", search: "hotels Reykjavik 101 Vesturbaer parking" },
-  12: { area: "续住雷克雅未克；早班机才考虑 KEF", why: "不换房最灵活，可把雷克雅内斯当作天气允许才执行的半日环线。", tradeoff: "若次日航班很早，住 Keflavík 可降低误机压力，但会少一晚市区时间。", search: "hotels Reykjavik Iceland parking" },
-  13: { area: "无需住宿", why: "按国际航班时间倒推离店、加油、还车和安检。", tradeoff: "特别早的航班可把前一晚改到 Keflavík / 机场周边。", search: "hotels near Keflavik Airport Iceland" }
+  0: { area: "KEF 机场附近（Excel 待确认）", why: "Excel 写明大家住机场酒店，并优先考虑 Aurora Hotel。", tradeoff: "同一行又写了雷克雅未克，且提车时间有 25 日晚与 26 日早两个版本；页面保留冲突。", search: "hotels near Keflavik International Airport Iceland" },
+  1: { area: "Stykkishólmur 斯蒂基斯霍尔米", why: "Excel 指定入住“白日梦想家小镇”，也是次日向阿克雷里出发的起点。", tradeoff: "Day 1 点位很多，优先选择可较晚入住且带停车位的住宿。", search: "hotels Stykkisholmur Iceland" },
+  2: { area: "Akureyri 阿克雷里", why: "Excel 当前计划直接住阿克雷里，餐饮和补给集中。", tradeoff: "表中也讨论过继续开到胡萨维克，但没有作为当前住宿落点。", search: "hotels Akureyri Iceland parking" },
+  3: { area: "Mývatn 米湖周边", why: "观鲸结束后前往米湖，便于晚上泡温泉并衔接次日地热区。", tradeoff: "Excel 提到 Vogafjós Farm Resort；是否预订仍以实际订单为准。", search: "hotels Myvatn Iceland" },
+  4: { area: "Egilsstaðir 埃伊尔斯塔济", why: "Excel 推荐东部服务中心落脚，避开塞济斯菲厄泽进出和补给不便。", tradeoff: "当天点位非常密集，晚到风险较高。", search: "hotels Egilsstadir Iceland" },
+  5: { area: "Höfn 霍芬附近", why: "Excel 写明霍芬附近已经预订，且为分开的两家酒店。", tradeoff: "页面只标住宿区域，不推断或公开具体酒店订单。", search: "hotels Hofn Iceland" },
+  6: { area: "Jökulsárlón 冰河湖附近", why: "Excel 写明已订，可衔接快艇和次日冰川徒步。", tradeoff: "快艇可能临时取消，注意订单邮件。", search: "hotels near Jokulsarlon Glacier Lagoon Iceland" },
+  7: { area: "Vík 维克", why: "冰川徒步后沿南岸向西，Excel 指定在维克入住。", tradeoff: "徒步约 6 小时，当天峡谷停留要服从集合和结束时间。", search: "hotels Vik Iceland" },
+  8: { area: "Selfoss 塞尔福斯", why: "Excel 指定南岸瀑布之后在塞尔福斯落脚。", tradeoff: "表内也出现“间歇泉附近”的想法，但当前住宿列仍为塞尔福斯。", search: "hotels Selfoss Iceland" },
+  9: { area: "Reykjavík 雷克雅未克", why: "完成黄金圈后回到首都，方便次日市区和雷克雅内斯半岛。", tradeoff: "市中心停车条件差异较大，订房时核对停车。", search: "hotels Reykjavik Iceland parking" },
+  10: { area: "KEF 机场附近", why: "Excel 写明 10 月 5 日晚还车并住机场附近，服务次日 07:40 航班。", tradeoff: "还车、加油和酒店接驳时间需要按租车订单确认。", search: "hotels near Keflavik Airport Iceland" },
+  11: { area: "无需住宿", why: "当天由 KEF 经伦敦返程。", tradeoff: "注意跨夜航班和行李直挂规则。", search: "Keflavik International Airport Iceland" }
 };

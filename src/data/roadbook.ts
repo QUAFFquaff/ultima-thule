@@ -1,30 +1,30 @@
 export const roadbook = {
   title: "Ultima Thule",
-  subtitle: "冰岛 13 天环岛自驾",
-  dates: "2026.09.25-2026.10.07",
-  routeMode: "逆时针环岛 / 4x4 SUV / 不走 F 路",
+  subtitle: "2026 国庆冰岛顺时针自驾",
+  dates: "2026.09.25-2026.10.06",
+  routeMode: "顺时针环岛 / 以 Excel 当前计划为准",
   summary:
-    "一份手机途中使用的沉浸式冰岛路书：路线、风险、住宿、导航和旅行知识放在同一个冷冽的极光界面里。",
+    "从凯夫拉维克先去斯奈山，再沿北部、东部和南岸回到雷克雅未克。每天的点位、住宿和分段导航均按当前 Excel 行程重排。",
   mapButton: "在 Google Maps 预览今日路线",
   tabs: [
     { id: "itinerary", label: "行程", icon: "🗺️" },
-    { id: "geography", label: "地理", icon: "🧭" },
+    { id: "geography", label: "地理", icon: "🌋" },
     { id: "gods", label: "众神", icon: "⚡" },
     { id: "sagas", label: "Saga", icon: "📜" },
     { id: "todo", label: "待办", icon: "☑️" },
-    { id: "budget", label: "记账", icon: "💵" },
-    { id: "weather", label: "天气路况", icon: "🌤️" }
+    { id: "budget", label: "记账", icon: "💰" },
+    { id: "weather", label: "天气路况", icon: "🌦️" }
   ],
   stats: [
-    { label: "天数", value: "13 天" },
-    { label: "方向", value: "逆时针" },
-    { label: "座驾", value: "4x4 SUV" },
-    { label: "季节", value: "极光季" }
+    { label: "行程", value: "Day 0-11" },
+    { label: "方向", value: "顺时针" },
+    { label: "返程", value: "10 月 6 日" },
+    { label: "依据", value: "当前 Excel" }
   ],
   dailyModes: [
-    { label: "途中模式", description: "只看今日路线、风险、住宿和导航按钮。" },
+    { label: "途中模式", description: "只看今日点位、住宿、风险和逐段导航。" },
     { label: "学习模式", description: "补充北欧神话、Saga、冰岛地理和安全知识。" }
   ],
   footer:
-    "路书信息以实际天气、道路封控、预约状态和当地安全公告为准。"
+    "页面忠实呈现 Excel 当前计划；黄色卡片是待确认或修改意见，不代表计划已被修改。实际出行以天气、道路、预订状态和当地安全公告为准。"
 };

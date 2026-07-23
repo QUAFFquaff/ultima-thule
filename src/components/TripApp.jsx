@@ -35,6 +35,11 @@ export default function TripApp({ days, baseUrl }) {
           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-300 via-emerald-300 to-orange-300" />
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-100/70">aurora roadbook</p>
           <h1 className="aurora-text mt-3 text-4xl font-black leading-tight sm:text-6xl">{roadbook.title}</h1>
+          <p className="mt-2 text-lg font-bold text-white sm:text-xl">{roadbook.subtitle}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className="rounded-full border border-cyan-200/25 bg-cyan-200/10 px-3 py-1.5 text-xs font-bold text-cyan-50">{roadbook.dates}</span>
+            <span className="rounded-full border border-emerald-200/25 bg-emerald-200/10 px-3 py-1.5 text-xs font-bold text-emerald-50">↻ {roadbook.routeMode}</span>
+          </div>
           <p className="mt-3 max-w-2xl text-base leading-7 text-cyan-50/80">{roadbook.summary}</p>
           <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {roadbook.stats.map((stat) => (
@@ -115,8 +120,8 @@ function RouteBoard({ days, selectedDay, onSelect }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.24em] text-cyan-100/60">interactive route</p>
-          <h2 className="mt-1 text-xl font-bold text-white">Day {day.day} · 真实路线地图</h2>
-          <p className="mt-1 text-xs leading-5 text-cyan-50/55">点标记看说明；地图用于选住宿区域，正式驾驶请打开 Google Maps。</p>
+          <h2 className="mt-1 text-xl font-bold text-white">Day {day.day} · 每日点位与顺序</h2>
+          <p className="mt-1 text-xs leading-5 text-cyan-50/55">点标记展示 Excel 的顺序；连线仅为示意，正式驾驶请打开 Google Maps。</p>
         </div>
         <span className="shrink-0 rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-3 py-2 text-xs text-emerald-100">{day.distance}</span>
       </div>
@@ -235,7 +240,7 @@ function TodayPanel({ day, baseUrl, openChecklist, setOpenChecklist }) {
         <Metric label="住宿" value={day.accommodation} />
       </div>
       <div className="mt-4 flex gap-2">
-        <a className="flex-1 rounded-2xl bg-cyan-300 px-4 py-3 text-center text-sm font-black text-slate-950 transition hover:bg-cyan-200" href={routeUrl} target="_blank" rel="noreferrer">{roadbook.mapButton} ↗</a>
+        <a className="flex-1 rounded-2xl bg-cyan-300 px-4 py-3 text-center text-sm font-black text-slate-950 transition hover:bg-cyan-200" href={routeUrl} target="_blank" rel="noreferrer">{stops.length > 1 ? roadbook.mapButton : "在 Google Maps 查看地点"} ↗</a>
         <a className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold text-cyan-50" href={`${baseUrl}itinerary/${day.slug}/`}>详情</a>
       </div>
       <p className="mt-2 text-xs leading-5 text-cyan-50/48">全程按钮适合预览；实际开车建议使用下方每一段的“导航”，手机端更稳定。</p>
@@ -254,6 +259,17 @@ function TodayPanel({ day, baseUrl, openChecklist, setOpenChecklist }) {
         </section>
       )}
       <Timeline segments={day.segments} />
+      {day.planNotes?.length > 0 && (
+        <section className="mt-4 rounded-2xl border border-amber-300/30 bg-amber-300/10 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="font-bold text-amber-50">Excel 待确认 / 修改意见</h3>
+            <span className="rounded-lg bg-amber-200 px-2 py-1 text-[10px] font-black text-slate-950">尚未改计划</span>
+          </div>
+          <ul className="mt-2 space-y-2 text-sm leading-6 text-amber-50/80">
+            {day.planNotes.map((note) => <li key={note}>• {note}</li>)}
+          </ul>
+        </section>
+      )}
       <section className="mt-4 rounded-2xl border border-rose-300/20 bg-rose-400/10 p-4">
         <h3 className="font-bold text-rose-50">风险提醒</h3>
         <ul className="mt-2 space-y-2 text-sm text-rose-50/80">
@@ -282,6 +298,8 @@ function Metric({ label, value }) {
 }
 
 function Timeline({ segments }) {
+  if (!segments.length) return null;
+
   return (
     <div className="mt-4">
       <h3 className="mb-2 text-sm font-bold text-cyan-50/90">路线时间线</h3>

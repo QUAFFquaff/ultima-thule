@@ -1,44 +1,29 @@
 ---
-title: "返回雷克雅未克与温泉"
+title: "返程：KEF 经伦敦回北京"
 day: 11
-date: "2026-10-05"
-route: "斯奈山半岛 → 雷克雅未克 → 蓝湖 Blue Lagoon / Sky Lagoon"
-distance: "210 km"
-driveTime: "3-3.5 h"
-accommodation: "雷克雅未克"
-region: "首都回程"
+date: "2026-10-06"
+route: "KEF 07:40 → London 11:55；London 22:40 → Beijing 15:40+1"
+distance: "飞行日"
+driveTime: "无自驾"
+accommodation: "无"
+region: "回程 flight"
 mapUrl: "https://www.google.com/maps"
-icon: "🛁"
-tags: ["回城", "温泉", "火山封控"]
-learningRefs: ["volcano", "freya"]
-highlights:
-  - "返回首都"
-  - "Blue Lagoon 或 Sky Lagoon 放松"
-risks:
-  - "雷克雅内斯半岛可能受火山或道路封控影响"
-  - "Sky Lagoon 作为稳定备选"
-backup:
-  - "若蓝湖受影响，直接改 Sky Lagoon"
-  - "不折返封控区域"
-checklist:
-  - "提前确认温泉预约状态"
-  - "查看 Reykjanes 封控公告"
-  - "入住首都后补齐返程前物资"
-segments:
-  - from: "Snaefellsnes"
-    to: "Reykjavík"
-    distance: "180 km"
-    driveTime: "2 h 45 min"
-  - from: "Reykjavík"
-    to: "Blue Lagoon / Sky Lagoon"
-    distance: "30 km"
-    driveTime: "30-45 min"
+icon: "🛫"
+tags: ["返程", "伦敦转机", "早班机"]
+learningRefs: ["tyr"]
+highlights: ["07:40-11:55 雷克雅未克至伦敦", "22:40-15:40+1 伦敦至北京"]
+risks: ["早班国际航班需提前到机场", "确认行李是否直挂", "核对伦敦转机机场和入境要求"]
+backup: ["航班变动时以航空公司通知为准"]
+planNotes:
+  - "网页按 Excel 的 10 月 6 日返程，不再保留旧项目的 10 月 7 日回程日。"
+checklist: ["护照与登机牌", "确认行李直挂", "确认转机航站楼", "预留安检时间"]
+segments: []
 ---
 
 ## 今日概览
 
-今天从半岛收束回首都圈，核心任务是回城和温泉放松。
+今天不安排自驾和景点。按照 Excel 航班时间从 KEF 前往伦敦，再转机返回北京。
 
-## 备选方案
+## 出发提示
 
-Blue Lagoon 受影响时，Sky Lagoon 是更稳定的替代。
+前一晚已经住到机场附近并还车，早晨只保留酒店至航站楼、值机和安检时间。

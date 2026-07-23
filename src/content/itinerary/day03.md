@@ -1,59 +1,32 @@
 ---
-title: "南岸瀑布与黑沙滩"
+title: "众神瀑布、观鲸与米湖"
 day: 3
-date: "2026-09-27"
-route: "Selfoss → Seljalandsfoss → Skógafoss → Reynisfjara → Vík"
-distance: "180 km"
-driveTime: "2.5-3 h"
-accommodation: "Vík"
-region: "南岸"
+date: "2026-09-28"
+route: "Akureyri → Goðafoss → Húsavík 观鲸 → Mývatn"
+distance: "约 190 km"
+driveTime: "约 3 h 纯驾驶"
+accommodation: "Mývatn"
+region: "北部观鲸"
 mapUrl: "https://www.google.com/maps"
-icon: "🌊"
-tags: ["瀑布", "黑沙滩", "海浪"]
-learningRefs: ["sneaker-waves", "heimdall"]
-highlights:
-  - "Seljalandsfoss"
-  - "Skógafoss"
-  - "Dyrhólaey"
-  - "Reynisfjara 黑沙滩"
-risks:
-  - "Reynisfjara 存在 sneaker waves"
-  - "不要靠近海浪和湿沙线"
-  - "瀑布周边地面湿滑"
-backup:
-  - "风大时缩短 Dyrhólaey 停留"
-  - "优先保留 Skógafoss 和 Vík 入住"
-checklist:
-  - "准备防水外层和防滑鞋"
-  - "黑沙滩停车后先看警示牌"
-  - "尽量白天抵达 Vík"
+icon: "🐋"
+tags: ["观鲸", "众神瀑布", "米湖"]
+learningRefs: ["thor", "geothermal"]
+highlights: ["Goðafoss", "Húsavík 下午观鲸", "米湖温泉"]
+risks: ["观鲸可能因风浪取消", "海上体感温度低", "按观鲸集合时间倒推离开瀑布时间"]
+backup: ["观鲸取消则增加米湖停留", "Excel 备注也允许先去胡萨维克再去众神瀑布"]
+planNotes:
+  - "Excel 当前行驶轨迹写“阿克雷里→众神瀑布→胡萨维克→米湖”，同时备注可交换前两站；页面按行驶轨迹展示，未替换顺序。"
+checklist: ["提前预订下午观鲸团", "确认集合港口与时间", "携带保暖防水层", "确认米湖温泉安排"]
 segments:
-  - from: "Selfoss"
-    to: "Seljalandsfoss"
-    distance: "65 km"
-    driveTime: "50 min"
-  - from: "Seljalandsfoss"
-    to: "Skógafoss"
-    distance: "30 km"
-    driveTime: "25 min"
-  - from: "Skógafoss"
-    to: "Reynisfjara"
-    distance: "70 km"
-    driveTime: "55 min"
-  - from: "Reynisfjara"
-    to: "Vík"
-    distance: "15 km"
-    driveTime: "15 min"
+  - { from: "Akureyri", to: "Goðafoss", distance: "约 35 km", driveTime: "约 35 min" }
+  - { from: "Goðafoss", to: "Húsavík", distance: "约 50 km", driveTime: "约 45 min" }
+  - { from: "Húsavík", to: "Mývatn", distance: "约 55 km", driveTime: "约 50 min" }
 ---
 
 ## 今日概览
 
-今天是南岸代表性景观集中出现的一天，视觉冲击强，同时也开始进入风浪风险更明显的区域。
+Goðafoss 的名字与冰岛改信基督教的传统故事有关；Húsavík 是冰岛最著名的观鲸港之一。晚上进入米湖地热景观带。
 
-## 推荐节奏
+## 时间锚点
 
-早餐后向东，先看 Seljalandsfoss，再到 Skógafoss。中午前后去 Dyrhólaey 和 Reynisfjara，下午抵达 Vík。
-
-## 天气与道路提醒
-
-南岸常见横风和阵雨，停车开门时抓稳车门。黑沙滩不要背对海浪。
+下午观鲸团是今天最硬的预约，其他停留都应围绕集合时间调整。

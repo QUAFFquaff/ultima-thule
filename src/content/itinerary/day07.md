@@ -1,50 +1,33 @@
 ---
-title: "Dettifoss 与米湖地热"
+title: "冰川徒步到维克"
 day: 7
-date: "2026-10-01"
-route: "Egilsstaðir → Dettifoss → Hverir → Mývatn"
-distance: "250 km"
-driveTime: "3.5-4 h"
-accommodation: "Mývatn 周边"
-region: "北部地热区"
+date: "2026-10-02"
+route: "冰川徒步集合点 → Fjaðrárgljúfur → Eldhraun 苔藓熔岩原 → Vík"
+distance: "约 200 km"
+driveTime: "约 3 h 纯驾驶"
+accommodation: "Vík"
+region: "南岸冰川徒步"
 mapUrl: "https://www.google.com/maps"
-icon: "♨️"
-tags: ["瀑布", "地热", "温泉"]
-learningRefs: ["geothermal", "thor"]
-highlights:
-  - "Dettifoss"
-  - "Hverir 地热区"
-  - "米湖温泉"
-risks:
-  - "出发前确认 Dettifoss 道路状况"
-  - "地热区不要离开步道"
-  - "硫磺气味和湿滑泥地要注意"
-backup:
-  - "道路不佳时跳过 Dettifoss"
-  - "把重点放在 Hverir 和 Mývatn 周边"
-checklist:
-  - "出发前查看 road.is"
-  - "带好防风层和帽子"
-  - "温泉若要泡，提前确认营业时间"
+icon: "🥾"
+tags: ["冰川徒步", "羽毛峡谷", "苔藓熔岩原"]
+learningRefs: ["glacier", "sneaker-waves"]
+highlights: ["约 6 小时冰川徒步", "Fjaðrárgljúfur", "Eldhraun 沿途景观", "Vík 俯瞰"]
+risks: ["徒步随时可能因天气取消", "必须跟团并服从向导", "结束后体力下降，不安排夜间赶路"]
+backup: ["徒步延误时跳过羽毛峡谷", "苔藓熔岩原只沿途观看，不为拍照踩踏"]
+planNotes:
+  - "Excel 把 2026 年 10 月 2 日写成周四，实际是周五；网页只按日期展示，没有改 Excel。"
+  - "Excel 未写冰川徒步的具体集合点；页面标在 Skaftafell 区域，但导航前必须替换为订单邮件中的真实地址。"
+checklist: ["反复检查活动邮件", "确认集合点和提前到达时间", "准备保暖层和手套", "徒步后评估是否去羽毛峡谷"]
 segments:
-  - from: "Egilsstaðir"
-    to: "Dettifoss"
-    distance: "135 km"
-    driveTime: "2 h"
-  - from: "Dettifoss"
-    to: "Hverir"
-    distance: "55 km"
-    driveTime: "45 min"
-  - from: "Hverir"
-    to: "Mývatn"
-    distance: "25 km"
-    driveTime: "25 min"
+  - { from: "Skaftafell glacier hike meeting point", to: "Fjaðrárgljúfur", distance: "约 95 km", driveTime: "约 1 h 20 min" }
+  - { from: "Fjaðrárgljúfur", to: "Eldhraun Lava Field", distance: "约 20 km", driveTime: "约 20 min" }
+  - { from: "Eldhraun Lava Field", to: "Vík", distance: "约 75 km", driveTime: "约 55 min" }
 ---
 
 ## 今日概览
 
-从东部进入北部后，景观会切换到更粗粝的瀑布与地热地貌。今天的关键是道路判断。
+冰川徒步是全程强预约活动。羽毛峡谷由河流长期切割形成，Eldhraun 则覆盖着极脆弱的苔藓，适合沿途观看而非踩入拍照。
 
-## 天气与道路提醒
+## 小镇提示
 
-今天一定把道路信息放在第一位。地热区可能烫伤，任何时候都不要离开明确步道。
+Excel 备注维克镇内有坡可登高俯瞰；是否前往取决于徒步结束后的体力和天气。

@@ -1,57 +1,31 @@
 ---
-title: "黄金圈到 Selfoss"
+title: "赶路去北边"
 day: 2
-date: "2026-09-26"
-route: "雷克雅未克 → 辛格维利尔 Þingvellir → 盖歇尔 → 黄金瀑布 → Selfoss"
-distance: "230 km"
-driveTime: "3.5-4 h"
-accommodation: "Selfoss"
-region: "黄金圈"
+date: "2026-09-27"
+route: "Stykkishólmur → Hvítserkur（可选）→ Akureyri"
+distance: "约 380-430 km"
+driveTime: "约 5-6 h"
+accommodation: "Akureyri"
+region: "西北部到北部"
 mapUrl: "https://www.google.com/maps"
-icon: "🏛️"
-tags: ["黄金圈", "裂谷", "瀑布"]
-learningRefs: ["rift", "heimdall"]
-highlights:
-  - "辛格维利尔国家公园"
-  - "Strokkur 间歇泉"
-  - "黄金瀑布 Gullfoss"
-risks:
-  - "风大时停车开门注意"
-  - "雨天步道湿滑"
-backup:
-  - "压缩步道停留时间"
-  - "Selfoss 市区提早入住休整"
-checklist:
-  - "早餐后出发"
-  - "检查当天风速和降雨"
-  - "保留傍晚机动时间"
+icon: "🚙"
+tags: ["长途", "犀牛石", "阿克雷里"]
+learningRefs: ["tyr"]
+highlights: ["Hvítserkur 犀牛石（可选）", "Akureyri 市区", "Strikið 峡湾景观餐厅"]
+risks: ["长途驾驶，固定安排休息", "Hvítserkur 支线路面不好时直接放弃", "不要临时加太多点"]
+backup: ["跳过 Hvítserkur 直达 Akureyri", "抵达后只做补给和晚餐"]
+planNotes:
+  - "Excel 讨论过继续开到 Goðafoss 或 Húsavík 住宿，但当前住宿列为 Akureyri；页面未把讨论方案改成正式路线。"
+checklist: ["前一晚加油", "准备车上简餐", "核对 Hvítserkur 支线路况"]
 segments:
-  - from: "Reykjavík"
-    to: "Þingvellir"
-    distance: "50 km"
-    driveTime: "50 min"
-  - from: "Þingvellir"
-    to: "Geysir"
-    distance: "60 km"
-    driveTime: "50 min"
-  - from: "Geysir"
-    to: "Gullfoss"
-    distance: "10 km"
-    driveTime: "10 min"
-  - from: "Gullfoss"
-    to: "Selfoss"
-    distance: "110 km"
-    driveTime: "1 h 40 min"
+  - { from: "Stykkishólmur", to: "Hvítserkur", distance: "约 230 km", driveTime: "约 3 h 20 min" }
+  - { from: "Hvítserkur", to: "Akureyri", distance: "约 200 km", driveTime: "约 2 h 40 min" }
 ---
 
 ## 今日概览
 
-今天进入经典黄金圈。景点密度适中，适合作为环岛前半段热身日。
+今天核心任务是稳定抵达阿克雷里。Hvítserkur 的轮廓像饮水的犀牛，但它是可选支线，不应影响北部住宿。
 
-## 推荐节奏
+## 吃饭提示
 
-建议早出发，先到辛格维利尔，再去 Geysir 和 Gullfoss，最后傍晚前抵达 Selfoss。
-
-## 天气与道路提醒
-
-露天停留多，风雨大时观景体感会迅速下降。步道湿滑时不要赶路。
+Excel 记录了 Strikið 峡湾景观餐厅和 Berlín Café，可作为抵达后的用餐候选，营业时间仍需临行确认。
