@@ -2,10 +2,10 @@
 title: "东部峡湾到霍芬"
 day: 5
 date: "2026-09-30"
-route: "Egilsstaðir → Seyðisfjörður → Hvalnes → Vestrahorn / Viking Village → Höfn"
-distance: "约 360 km"
-driveTime: "约 5.5-6.5 h"
-accommodation: "Höfn 附近（已订）"
+route: "Hotel Hallormsstadur → Egilsstaðir → Seyðisfjörður → Hvalnes → Vestrahorn → Höfn 两组住宿"
+distance: "约 390 km"
+driveTime: "约 6-7 h"
+accommodation: "Nypugardar / Höfn Guesthouse"
 region: "东部峡湾"
 mapUrl: "https://www.google.com/maps"
 icon: "⛰️"
@@ -17,13 +17,15 @@ backup: ["天气或时间不合适时跳过 Seyðisfjörður", "保留 Hvalnes�
 planNotes:
   - "Excel 明确写了“改住 Egilsstaðir 后路线需要确认是否绕路”；页面按表中路线保留 Seyðisfjörður，没有擅自删除。"
   - "建议你们确认 Seyðisfjörður 是放在 Day 4、Day 5，还是取消；确认前仍显示为 Day 5。"
-checklist: ["早上检查山口能见度", "提前加油", "确认霍芬两家住宿地址", "为东峡湾弯道预留时间"]
+checklist: ["早上检查山口能见度", "提前加油", "确认各自入住 Nypugardar 或 Höfn Guesthouse", "为东峡湾弯道预留时间"]
 segments:
+  - { from: "Hotel Hallormsstadur", to: "Egilsstaðir", distance: "约 30 km", driveTime: "约 30 min" }
   - { from: "Egilsstaðir", to: "Seyðisfjörður", distance: "约 27 km", driveTime: "约 35 min" }
   - { from: "Seyðisfjörður", to: "Hvalnes Lighthouse", distance: "约 260 km", driveTime: "约 3 h 45 min" }
   - { from: "Hvalnes Lighthouse", to: "Hvalnes Nature Reserve Beach", distance: "约 2 km", driveTime: "约 5 min" }
   - { from: "Hvalnes Nature Reserve Beach", to: "Vestrahorn Viking Village", distance: "约 35 km", driveTime: "约 35 min" }
-  - { from: "Vestrahorn Viking Village", to: "Höfn", distance: "约 20 km", driveTime: "约 25 min" }
+  - { from: "Vestrahorn Viking Village", to: "Höfn Guesthouse", distance: "约 20 km", driveTime: "约 25 min" }
+  - { from: "Höfn Guesthouse", to: "Guesthouse Nypugardar", distance: "约 20 km", driveTime: "约 20 min" }
 ---
 
 ## 今日概览

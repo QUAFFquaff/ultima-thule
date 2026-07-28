@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { roadbook } from "../data/roadbook";
 import { accommodationGuide } from "../data/accommodationGuide";
+import { activityBookings } from "../data/bookings";
+import { missingCostItems, tripCosts } from "../data/tripCosts";
 import { tripStops } from "../data/tripMap";
 import { gods, mythSources } from "../data/learning";
 import { godStories } from "../data/mythologyStories";
@@ -83,7 +85,7 @@ export default function TripApp({ days, baseUrl }) {
       {activeTab === "gods" && <GodsPanel />}
       {activeTab === "sagas" && <SagaPanel />}
       {activeTab === "todo" && <TodoPanel days={days} />}
-      {activeTab === "budget" && <PlaceholderPanel title="记账占位" body="这里预留给油费、住宿、温泉、餐饮和活动费用。v1 先不接数据库，后续可用 localStorage 做离线记账。" />}
+      {activeTab === "budget" && <BudgetPanel />}
       {activeTab === "weather" && <TravelToolsPanel />}
     </div>
   );
@@ -255,7 +257,20 @@ function TodayPanel({ day, baseUrl, openChecklist, setOpenChecklist }) {
           </div>
           <p className="mt-3 text-sm leading-6 text-orange-50/80">{lodging.why}</p>
           <p className="mt-2 text-xs leading-5 text-orange-100/60">取舍：{lodging.tradeoff}</p>
-          <a className="mt-3 inline-flex rounded-xl border border-orange-200/25 bg-orange-200/10 px-3 py-2 text-sm font-bold text-orange-50 transition hover:bg-orange-200/20" href={googleMapsSearchUrl(lodging.search)} target="_blank" rel="noreferrer">在 Google Maps 查看这一带住宿 ↗</a>
+          {lodging.stays.length > 0 && (
+            <div className="mt-3 space-y-2">
+              {lodging.stays.map((stay) => (
+                <a key={stay.name} className="block rounded-xl border border-orange-200/20 bg-slate-950/20 p-3 transition hover:border-orange-200/40 hover:bg-orange-200/10" href={googleMapsSearchUrl(stay.search)} target="_blank" rel="noreferrer">
+                  <span className="flex items-center justify-between gap-3">
+                    <span className="font-bold text-orange-50">{stay.name}</span>
+                    <span className="shrink-0 text-xs font-black text-orange-100">导航 ↗</span>
+                  </span>
+                  <span className="mt-1 block text-xs text-orange-100/65">{stay.locality}</span>
+                  {stay.note && <span className="mt-1 block text-[11px] leading-5 text-orange-100/50">{stay.note}</span>}
+                </a>
+              ))}
+            </div>
+          )}
         </section>
       )}
       <Timeline segments={day.segments} />
@@ -849,16 +864,100 @@ function InfoBlock({ title, body }) {
 
 function TodoPanel({ days }) {
   const items = [...new Set(days.flatMap((day) => day.checklist))].slice(0, 14);
+  const confirmed = activityBookings.filter((item) => item.status === "confirmed");
+  const considering = activityBookings.filter((item) => item.status === "considering");
   return (
-    <section className="glass rounded-2xl p-4">
-      <h2 className="text-2xl font-black text-white">旅行待办</h2>
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
-        {items.map((item) => (
-          <label key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 p-3 text-sm text-cyan-50/80">
-            <input type="checkbox" className="h-4 w-4 accent-cyan-300" />
-            {item}
-          </label>
-        ))}
+    <section className="space-y-4">
+      <div className="glass rounded-2xl p-4">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100/60">booking desk</p>
+            <h2 className="mt-1 text-2xl font-black text-white">已预订项目</h2>
+          </div>
+          <span className="rounded-xl bg-emerald-300 px-3 py-2 text-xs font-black text-slate-950">{confirmed.length} 项已定</span>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {confirmed.map((booking) => (
+            <article key={booking.title} className="rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-emerald-100/60">Day {booking.day} {booking.time && `· ${booking.time}`}</p>
+                  <h3 className="mt-1 font-black text-white">{booking.title}</h3>
+                </div>
+                <span className="rounded-lg bg-emerald-200 px-2 py-1 text-[10px] font-black text-slate-950">已确认</span>
+              </div>
+              {booking.cost && <p className="mt-3 text-lg font-black text-emerald-100">{booking.cost}</p>}
+              <p className="mt-2 text-xs leading-5 text-emerald-50/65">{booking.note}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div className="glass rounded-2xl p-4">
+        <h2 className="text-2xl font-black text-white">仍待决定</h2>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {considering.map((booking) => (
+            <div key={booking.title} className="rounded-2xl border border-amber-300/20 bg-amber-300/10 p-3">
+              <p className="font-bold text-amber-50">{booking.day !== undefined ? `Day ${booking.day} · ` : ""}{booking.title}</p>
+              <p className="mt-1 text-xs leading-5 text-amber-50/60">{booking.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="glass rounded-2xl p-4">
+        <h2 className="text-2xl font-black text-white">旅行待办</h2>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {items.map((item) => (
+            <label key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 p-3 text-sm text-cyan-50/80">
+              <input type="checkbox" className="h-4 w-4 accent-cyan-300" />
+              {item}
+            </label>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BudgetPanel() {
+  const knownRmb = tripCosts.filter((item) => item.currency === "RMB").reduce((sum, item) => sum + item.amount, 0);
+  const knownIsk = tripCosts.filter((item) => item.currency === "ISK").reduce((sum, item) => sum + item.amount, 0);
+  const formatNumber = (value, digits = 0) => new Intl.NumberFormat("zh-CN", { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);
+
+  return (
+    <section className="space-y-4">
+      <div className="glass rounded-2xl p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100/60">excel cost snapshot</p>
+        <h2 className="mt-1 text-2xl font-black text-white">已录入费用</h2>
+        <p className="mt-2 text-sm leading-6 text-cyan-50/65">按新版 Excel 展示已填写金额，不换算汇率、不推断空白费用，也不公开垫付人信息。</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <Metric label="已知人民币" value={`¥${formatNumber(knownRmb, 2)}`} />
+          <Metric label="已知冰岛克朗" value={`${formatNumber(knownIsk)} ISK`} />
+          <Metric label="住宿待补金额" value={`${missingCostItems.length} 项`} />
+        </div>
+      </div>
+
+      <div className="glass rounded-2xl p-4">
+        <h3 className="text-lg font-black text-white">费用明细</h3>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {tripCosts.map((item) => (
+            <div key={`${item.date}-${item.title}`} className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/8 p-3">
+              <div>
+                <p className="text-[11px] font-bold text-cyan-100/50">{item.category} · {item.date}</p>
+                <p className="mt-1 text-sm font-bold text-white">{item.title}</p>
+              </div>
+              <p className="shrink-0 font-black text-cyan-100">{item.currency === "RMB" ? `¥${formatNumber(item.amount, 2)}` : `${formatNumber(item.amount)} ISK`}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="glass rounded-2xl p-4">
+        <h3 className="text-lg font-black text-white">Excel 尚未填写金额</h3>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {missingCostItems.map((item) => <span key={item} className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-2 text-xs font-bold text-amber-50">{item}</span>)}
+        </div>
       </div>
     </section>
   );

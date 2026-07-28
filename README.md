@@ -22,7 +22,7 @@ src/content/itinerary/day00.md
 src/content/itinerary/day11.md
 ```
 
-修改路线、住宿、车程、风险、备选方案、路线分段和 Google Maps 链接，只需要编辑对应 Markdown 的 front matter。
+修改路线、住宿、车程、风险、备选方案、路线分段和 Google Maps 链接，只需要编辑对应 Markdown 的 front matter。已订住宿位于 `src/data/accommodationGuide.ts`，活动预约和费用快照分别位于 `src/data/bookings.ts`、`src/data/tripCosts.ts`。
 
 关键字段：
 

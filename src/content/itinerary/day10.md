@@ -2,10 +2,10 @@
 title: "雷克雅内斯半岛与首都市区"
 day: 10
 date: "2026-10-05"
-route: "Reykjavík → Reykjanesviti → 半岛黑沙滩 → Tjörnin → Hallgrímskirkja → 彩虹街 → KEF 机场附近"
+route: "Alda Hotel → Reykjanesviti → 半岛黑沙滩 → Tjörnin → Hallgrímskirkja → 彩虹街 → Konvin Hotel"
 distance: "约 180 km"
 driveTime: "约 3 h 纯驾驶"
-accommodation: "KEF 机场附近"
+accommodation: "Konvin Hotel by KEF Airport"
 region: "雷克雅内斯与首都"
 mapUrl: "https://www.google.com/maps"
 icon: "🌆"
@@ -17,15 +17,15 @@ backup: ["半岛受限时只逛市区", "体力不足时优先教堂、彩虹街
 planNotes:
   - "Excel 写“最后一天看下市区和周边具体怎么安排”，所以当前点位顺序仍可调整；页面没有替你们重排。"
   - "Excel 已明确“蓝湖不去了”，新版路线已移除蓝湖，不再作为备选。"
-  - "Excel 写 10 月 5 日晚上还车、住机场附近；请再按实际租车门店营业时间确认。"
-checklist: ["确认雷克雅内斯开放状态", "确认 Hallgrímskirkja 登塔时间", "完成加油和还车拍照", "确认机场酒店接驳"]
+  - "Excel 写 10 月 5 日晚上还车并已订 Konvin Hotel；请按实际租车门店营业时间确认还车顺序。"
+checklist: ["确认雷克雅内斯开放状态", "确认 Hallgrímskirkja 登塔时间", "完成加油和还车拍照", "确认 Konvin Hotel 接驳"]
 segments:
-  - { from: "Reykjavík", to: "Reykjanesviti Lighthouse", distance: "约 70 km", driveTime: "约 1 h" }
+  - { from: "Alda Hotel Reykjavik", to: "Reykjanesviti Lighthouse", distance: "约 70 km", driveTime: "约 1 h" }
   - { from: "Reykjanesviti Lighthouse", to: "Valahnúkamöl", distance: "约 5 km", driveTime: "约 10 min" }
   - { from: "Valahnúkamöl", to: "Tjörnin Reykjavik", distance: "约 75 km", driveTime: "约 1 h 10 min" }
   - { from: "Tjörnin Reykjavik", to: "Hallgrímskirkja", distance: "约 2 km", driveTime: "建议步行" }
   - { from: "Hallgrímskirkja", to: "Skólavörðustígur", distance: "约 1 km", driveTime: "建议步行" }
-  - { from: "Skólavörðustígur", to: "Keflavik Airport", distance: "约 50 km", driveTime: "约 50 min" }
+  - { from: "Skólavörðustígur", to: "Konvin Hotel Keflavik", distance: "约 50 km", driveTime: "约 50 min" }
 ---
 
 ## 今日概览

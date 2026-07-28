@@ -4,7 +4,7 @@ export const roadbook = {
   dates: "2026.09.25-2026.10.06",
   routeMode: "顺时针环岛 / 以 Excel 当前计划为准",
   summary:
-    "从凯夫拉维克先去斯奈山，再沿北部、东部和南岸回到雷克雅未克。每天的点位、住宿和分段导航均按当前 Excel 行程重排。",
+    "从凯夫拉维克先去斯奈山，再沿北部、东部和南岸回到雷克雅未克。11 晚住宿和 4 项已确认活动均已按最新版 Excel 更新，并提供逐段导航。",
   mapButton: "在 Google Maps 预览今日路线",
   tabs: [
     { id: "itinerary", label: "行程", icon: "🗺️" },
@@ -19,7 +19,7 @@ export const roadbook = {
     { label: "行程", value: "Day 0-11" },
     { label: "方向", value: "顺时针" },
     { label: "返程", value: "10 月 6 日" },
-    { label: "依据", value: "当前 Excel" }
+    { label: "住宿", value: "11 晚已定" }
   ],
   dailyModes: [
     { label: "途中模式", description: "只看今日点位、住宿、风险和逐段导航。" },

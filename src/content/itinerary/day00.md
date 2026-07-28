@@ -2,27 +2,27 @@
 title: "抵达冰岛 · 机场住宿"
 day: 0
 date: "2026-09-25"
-route: "北京出发 → 欧洲转机 → KEF → 机场附近酒店"
+route: "北京出发 → 欧洲转机 → KEF → Sandgerði 已订住宿"
 distance: "机场短驳"
-driveTime: "待提车方案确认"
-accommodation: "KEF 机场附近（待确认）"
+driveTime: "约 10-15 min"
+accommodation: "Cozy apartment near the airport"
 region: "凯夫拉维克"
 mapUrl: "https://www.google.com/maps"
 icon: "🛬"
-tags: ["抵达", "机场酒店", "待确认"]
+tags: ["抵达", "机场住宿", "已订"]
 learningRefs: ["aurora"]
 highlights: ["两组航班抵达 KEF", "机场附近休息", "为次日斯奈山长线保留体力"]
 risks: ["长途飞行后避免疲劳驾驶", "不同转机组合抵达时间不同，确认接机与酒店入住"]
 backup: ["若未提车，使用酒店接驳或步行", "晚到成员先在机场酒店会合"]
 planNotes:
-  - "Excel 同时写了“大家都住机场酒店”和“住雷克雅未克”，当前页面按机场酒店展示，但标记为待确认。"
-  - "Excel 同时出现“9 月 26 日早提车”和“25 日晚提车”；网页没有替你们决定。"
-checklist: ["确认两组航班与转机", "确认提车时间", "确认机场酒店名称和接驳方式"]
+  - "酒店名称和地址已经确定在 Sandgerði，但 Excel 的“住哪里”仍写雷克雅未克；页面按实际预订展示。"
+  - "Airbnb 精确门牌和私人分享链接不发布到公开网站，仍保留在 Excel。"
+checklist: ["确认两组航班与转机", "确认提车时间", "保存私人住宿入住说明"]
 segments:
   - from: "Keflavik International Airport"
-    to: "Aurora Hotel Keflavik Airport"
-    distance: "约 1 km"
-    driveTime: "约 5 min"
+    to: "Sandgerði"
+    distance: "约 10 km"
+    driveTime: "约 10-15 min"
 ---
 
 ## 今日概览
